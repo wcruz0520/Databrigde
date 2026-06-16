@@ -43,9 +43,12 @@ namespace CARGA_UDO
             this.prgCarga = new System.Windows.Forms.ProgressBar();
             this.lblEstado = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.MIConfig = new FontAwesome.Sharp.IconMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
             this.grpModoCarga.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConectar
@@ -249,6 +252,30 @@ namespace CARGA_UDO
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tabla principal";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.MIConfig});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(900, 36);
+            this.menuStrip1.TabIndex = 11;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // MIConfig
+            // 
+            this.MIConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MIConfig.IconChar = FontAwesome.Sharp.IconChar.Server;
+            this.MIConfig.IconColor = System.Drawing.Color.Black;
+            this.MIConfig.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.MIConfig.Name = "MIConfig";
+            this.MIConfig.Size = new System.Drawing.Size(135, 32);
+            this.MIConfig.Text = "Configuración";
+            this.MIConfig.Click += new System.EventHandler(this.MIConfig_Click);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -264,6 +291,8 @@ namespace CARGA_UDO
             this.Controls.Add(this.dtgRegistros);
             this.Controls.Add(this.btnProccess);
             this.Controls.Add(this.btnConectar);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Principal";
             this.Text = "Principal";
@@ -273,6 +302,8 @@ namespace CARGA_UDO
             this.grpModoCarga.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -294,6 +325,8 @@ namespace CARGA_UDO
         private System.Windows.Forms.ProgressBar prgCarga;
         private System.Windows.Forms.Label lblEstado;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private FontAwesome.Sharp.IconMenuItem MIConfig;
     }
 }
 

@@ -1383,7 +1383,15 @@ namespace CARGA_UDO
             }
         }
 
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
 
+        }
+
+        private void MIConfig_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
     public class RegistroTabla
