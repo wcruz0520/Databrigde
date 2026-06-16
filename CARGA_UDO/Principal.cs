@@ -260,13 +260,41 @@ namespace CARGA_UDO
                     var grid = new DataGridView
                     {
                         Dock = DockStyle.Fill,
-                        ReadOnly = false,
+
+                        // No editable
+                        ReadOnly = true,
                         AllowUserToAddRows = false,
+                        AllowUserToDeleteRows = false,
+                        AllowUserToResizeRows = false,
+
                         DataSource = table,
                         BackgroundColor = Color.White,
                         RowHeadersVisible = false,
-                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+                        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+
+                        // Contenido más pequeño
+                        DefaultCellStyle = new DataGridViewCellStyle
+                        {
+                            Font = new Font("Segoe UI", 8F, FontStyle.Regular),
+                            WrapMode = DataGridViewTriState.False
+                        },
+
+                        // Encabezado en negrita y reducido
+                        ColumnHeadersDefaultCellStyle = new DataGridViewCellStyle
+                        {
+                            Font = new Font("Segoe UI", 8F, FontStyle.Bold),
+                            Alignment = DataGridViewContentAlignment.MiddleCenter
+                        },
+
+                        ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.DisableResizing,
+                        ColumnHeadersHeight = 24,
+                        RowTemplate = { Height = 22 }
                     };
+
+                    grid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+                    grid.MultiSelect = false;
+                    grid.EditMode = DataGridViewEditMode.EditProgrammatically;
+
                     page.Controls.Add(grid);
                     tabs.TabPages.Add(page);
                 }

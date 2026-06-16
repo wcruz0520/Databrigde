@@ -37,13 +37,15 @@ namespace CARGA_UDO
             this.txtTableName = new System.Windows.Forms.TextBox();
             this.cmbTipoObj = new System.Windows.Forms.ComboBox();
             this.grpModoCarga = new System.Windows.Forms.GroupBox();
-            this.rdbSoloAgregar = new System.Windows.Forms.RadioButton();
-            this.rdbSoloActualizar = new System.Windows.Forms.RadioButton();
             this.rdbAgregarActualizar = new System.Windows.Forms.RadioButton();
+            this.rdbSoloActualizar = new System.Windows.Forms.RadioButton();
+            this.rdbSoloAgregar = new System.Windows.Forms.RadioButton();
             this.prgCarga = new System.Windows.Forms.ProgressBar();
             this.lblEstado = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
             this.grpModoCarga.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConectar
@@ -52,15 +54,16 @@ namespace CARGA_UDO
             this.btnConectar.BackColor = System.Drawing.Color.Gainsboro;
             this.btnConectar.FlatAppearance.BorderSize = 0;
             this.btnConectar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConectar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConectar.IconChar = FontAwesome.Sharp.IconChar.PlugCircleXmark;
             this.btnConectar.IconColor = System.Drawing.Color.Red;
             this.btnConectar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnConectar.IconSize = 32;
             this.btnConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConectar.Location = new System.Drawing.Point(684, 8);
+            this.btnConectar.Location = new System.Drawing.Point(719, 8);
             this.btnConectar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(183, 35);
+            this.btnConectar.Size = new System.Drawing.Size(148, 35);
             this.btnConectar.TabIndex = 0;
             this.btnConectar.Text = "Conectar";
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -73,15 +76,16 @@ namespace CARGA_UDO
             this.btnProccess.BackColor = System.Drawing.Color.Gainsboro;
             this.btnProccess.FlatAppearance.BorderSize = 0;
             this.btnProccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProccess.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProccess.IconChar = FontAwesome.Sharp.IconChar.Play;
             this.btnProccess.IconColor = System.Drawing.Color.Green;
             this.btnProccess.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnProccess.IconSize = 32;
             this.btnProccess.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnProccess.Location = new System.Drawing.Point(33, 488);
+            this.btnProccess.Location = new System.Drawing.Point(33, 506);
             this.btnProccess.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnProccess.Name = "btnProccess";
-            this.btnProccess.Size = new System.Drawing.Size(159, 49);
+            this.btnProccess.Size = new System.Drawing.Size(140, 35);
             this.btnProccess.TabIndex = 1;
             this.btnProccess.Text = "Procesar";
             this.btnProccess.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -95,15 +99,16 @@ namespace CARGA_UDO
             this.btnDetener.Enabled = false;
             this.btnDetener.FlatAppearance.BorderSize = 0;
             this.btnDetener.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDetener.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDetener.IconChar = FontAwesome.Sharp.IconChar.Stop;
             this.btnDetener.IconColor = System.Drawing.Color.Red;
             this.btnDetener.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnDetener.IconSize = 32;
             this.btnDetener.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDetener.Location = new System.Drawing.Point(198, 488);
+            this.btnDetener.Location = new System.Drawing.Point(218, 506);
             this.btnDetener.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDetener.Name = "btnDetener";
-            this.btnDetener.Size = new System.Drawing.Size(159, 49);
+            this.btnDetener.Size = new System.Drawing.Size(139, 35);
             this.btnDetener.TabIndex = 8;
             this.btnDetener.Text = "Detener";
             this.btnDetener.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -123,15 +128,15 @@ namespace CARGA_UDO
             this.dtgRegistros.Name = "dtgRegistros";
             this.dtgRegistros.RowHeadersWidth = 51;
             this.dtgRegistros.RowTemplate.Height = 24;
-            this.dtgRegistros.Size = new System.Drawing.Size(835, 350);
+            this.dtgRegistros.Size = new System.Drawing.Size(835, 355);
             this.dtgRegistros.TabIndex = 2;
             // 
             // btnCargar
             // 
-            this.btnCargar.Location = new System.Drawing.Point(33, 45);
+            this.btnCargar.Location = new System.Drawing.Point(33, 60);
             this.btnCargar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCargar.Name = "btnCargar";
-            this.btnCargar.Size = new System.Drawing.Size(51, 42);
+            this.btnCargar.Size = new System.Drawing.Size(51, 40);
             this.btnCargar.TabIndex = 3;
             this.btnCargar.Text = "📁";
             this.btnCargar.UseVisualStyleBackColor = true;
@@ -142,11 +147,11 @@ namespace CARGA_UDO
             this.txtTableName.BackColor = System.Drawing.Color.White;
             this.txtTableName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTableName.Enabled = false;
-            this.txtTableName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTableName.Location = new System.Drawing.Point(145, 60);
+            this.txtTableName.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtTableName.Location = new System.Drawing.Point(6, 27);
             this.txtTableName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtTableName.Name = "txtTableName";
-            this.txtTableName.Size = new System.Drawing.Size(237, 24);
+            this.txtTableName.Size = new System.Drawing.Size(248, 19);
             this.txtTableName.TabIndex = 4;
             // 
             // cmbTipoObj
@@ -154,70 +159,73 @@ namespace CARGA_UDO
             this.cmbTipoObj.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipoObj.FormattingEnabled = true;
-            this.cmbTipoObj.Location = new System.Drawing.Point(404, 56);
+            this.cmbTipoObj.Location = new System.Drawing.Point(265, 20);
             this.cmbTipoObj.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cmbTipoObj.Name = "cmbTipoObj";
-            this.cmbTipoObj.Size = new System.Drawing.Size(186, 33);
+            this.cmbTipoObj.Size = new System.Drawing.Size(146, 33);
             this.cmbTipoObj.TabIndex = 5;
-            //
+            // 
             // grpModoCarga
-            //
+            // 
             this.grpModoCarga.Controls.Add(this.rdbAgregarActualizar);
             this.grpModoCarga.Controls.Add(this.rdbSoloActualizar);
             this.grpModoCarga.Controls.Add(this.rdbSoloAgregar);
-            this.grpModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpModoCarga.Location = new System.Drawing.Point(596, 45);
+            this.grpModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpModoCarga.Location = new System.Drawing.Point(539, 45);
             this.grpModoCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.grpModoCarga.Name = "grpModoCarga";
             this.grpModoCarga.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.grpModoCarga.Size = new System.Drawing.Size(271, 62);
+            this.grpModoCarga.Size = new System.Drawing.Size(328, 62);
             this.grpModoCarga.TabIndex = 9;
             this.grpModoCarga.TabStop = false;
             this.grpModoCarga.Text = "Modo de carga";
-            //
-            // rdbSoloAgregar
-            //
-            this.rdbSoloAgregar.AutoSize = true;
-            this.rdbSoloAgregar.Location = new System.Drawing.Point(9, 22);
-            this.rdbSoloAgregar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.rdbSoloAgregar.Name = "rdbSoloAgregar";
-            this.rdbSoloAgregar.Size = new System.Drawing.Size(73, 21);
-            this.rdbSoloAgregar.TabIndex = 0;
-            this.rdbSoloAgregar.TabStop = true;
-            this.rdbSoloAgregar.Text = "Agregar";
-            this.rdbSoloAgregar.UseVisualStyleBackColor = true;
-            //
-            // rdbSoloActualizar
-            //
-            this.rdbSoloActualizar.AutoSize = true;
-            this.rdbSoloActualizar.Location = new System.Drawing.Point(88, 22);
-            this.rdbSoloActualizar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.rdbSoloActualizar.Name = "rdbSoloActualizar";
-            this.rdbSoloActualizar.Size = new System.Drawing.Size(86, 21);
-            this.rdbSoloActualizar.TabIndex = 1;
-            this.rdbSoloActualizar.TabStop = true;
-            this.rdbSoloActualizar.Text = "Actualizar";
-            this.rdbSoloActualizar.UseVisualStyleBackColor = true;
-            //
+            // 
             // rdbAgregarActualizar
-            //
+            // 
             this.rdbAgregarActualizar.AutoSize = true;
-            this.rdbAgregarActualizar.Location = new System.Drawing.Point(180, 22);
+            this.rdbAgregarActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rdbAgregarActualizar.Location = new System.Drawing.Point(228, 22);
             this.rdbAgregarActualizar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.rdbAgregarActualizar.Name = "rdbAgregarActualizar";
-            this.rdbAgregarActualizar.Size = new System.Drawing.Size(75, 21);
+            this.rdbAgregarActualizar.Size = new System.Drawing.Size(76, 21);
             this.rdbAgregarActualizar.TabIndex = 2;
             this.rdbAgregarActualizar.TabStop = true;
             this.rdbAgregarActualizar.Text = "Ambos";
             this.rdbAgregarActualizar.UseVisualStyleBackColor = true;
-            //
+            // 
+            // rdbSoloActualizar
+            // 
+            this.rdbSoloActualizar.AutoSize = true;
+            this.rdbSoloActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rdbSoloActualizar.Location = new System.Drawing.Point(112, 22);
+            this.rdbSoloActualizar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdbSoloActualizar.Name = "rdbSoloActualizar";
+            this.rdbSoloActualizar.Size = new System.Drawing.Size(95, 21);
+            this.rdbSoloActualizar.TabIndex = 1;
+            this.rdbSoloActualizar.TabStop = true;
+            this.rdbSoloActualizar.Text = "Actualizar";
+            this.rdbSoloActualizar.UseVisualStyleBackColor = true;
+            // 
+            // rdbSoloAgregar
+            // 
+            this.rdbSoloAgregar.AutoSize = true;
+            this.rdbSoloAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rdbSoloAgregar.Location = new System.Drawing.Point(9, 22);
+            this.rdbSoloAgregar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdbSoloAgregar.Name = "rdbSoloAgregar";
+            this.rdbSoloAgregar.Size = new System.Drawing.Size(84, 21);
+            this.rdbSoloAgregar.TabIndex = 0;
+            this.rdbSoloAgregar.TabStop = true;
+            this.rdbSoloAgregar.Text = "Agregar";
+            this.rdbSoloAgregar.UseVisualStyleBackColor = true;
+            // 
             // prgCarga
-            //
+            // 
             this.prgCarga.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.prgCarga.Location = new System.Drawing.Point(390, 506);
             this.prgCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.prgCarga.Name = "prgCarga";
-            this.prgCarga.Size = new System.Drawing.Size(477, 29);
+            this.prgCarga.Size = new System.Drawing.Size(478, 35);
             this.prgCarga.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.prgCarga.TabIndex = 6;
             // 
@@ -229,18 +237,29 @@ namespace CARGA_UDO
             this.lblEstado.Size = new System.Drawing.Size(0, 20);
             this.lblEstado.TabIndex = 7;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtTableName);
+            this.groupBox1.Controls.Add(this.cmbTipoObj);
+            this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox1.Location = new System.Drawing.Point(103, 45);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(421, 62);
+            this.groupBox1.TabIndex = 10;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Tabla principal";
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 562);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.grpModoCarga);
             this.Controls.Add(this.btnDetener);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.prgCarga);
-            this.Controls.Add(this.cmbTipoObj);
-            this.Controls.Add(this.txtTableName);
             this.Controls.Add(this.btnCargar);
             this.Controls.Add(this.dtgRegistros);
             this.Controls.Add(this.btnProccess);
@@ -252,6 +271,8 @@ namespace CARGA_UDO
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).EndInit();
             this.grpModoCarga.ResumeLayout(false);
             this.grpModoCarga.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,6 +293,7 @@ namespace CARGA_UDO
         private System.Windows.Forms.RadioButton rdbAgregarActualizar;
         private System.Windows.Forms.ProgressBar prgCarga;
         private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 
