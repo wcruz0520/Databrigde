@@ -248,7 +248,20 @@ namespace CARGA_UDO
                 var primeraHoja = dataSet.Tables[0].TableName;
                 if (!string.IsNullOrWhiteSpace(primeraHoja))
                 {
-                    txtTableName.Text = primeraHoja.Trim();
+                    string tablaSeleccionada = primeraHoja.Trim();
+
+                    if (!ExisteTablaEnBaseDatos(tablaSeleccionada))
+                    {
+                        string schema = Globals.rCompany?.CompanyDB ?? string.Empty;
+                        MessageBox.Show(
+                            $"La tabla [{tablaSeleccionada}] no existe en el schema [{schema}].",
+                            "Tabla no encontrada",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                        return;
+                    }
+
+                    txtTableName.Text = tablaSeleccionada;
                     IdentificarTipoTablaSeleccionada(txtTableName.Text);
                 }
 
@@ -611,6 +624,35 @@ namespace CARGA_UDO
         }
 
 
+
+        private bool ExisteTablaEnBaseDatos(string tabla)
+        {
+            if (string.IsNullOrWhiteSpace(tabla) || Globals.rCompany == null || !Globals.rCompany.Connected)
+                return false;
+
+            try
+            {
+                var rs = (SAPbobsCOM.Recordset)Globals.rCompany
+                    .GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                bool esHana = Globals.rCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB;
+                string nombreTabla = tabla.Trim().TrimStart('@').Replace("'", "''");
+                string tablaFisica = $"@{nombreTabla}";
+                string companyDb = (Globals.rCompany.CompanyDB ?? string.Empty).Replace("'", "''");
+
+                string sql = esHana
+                    ? $"SELECT \"TABLE_NAME\" FROM \"SYS\".\"TABLES\" WHERE UPPER(\"SCHEMA_NAME\") = UPPER('{companyDb}') AND UPPER(\"TABLE_NAME\") = UPPER('{tablaFisica}')"
+                    : $"SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE UPPER(TABLE_NAME) = UPPER('{tablaFisica}')";
+
+                rs.DoQuery(sql);
+                return !rs.EoF;
+            }
+            catch (Exception ex)
+            {
+                msg_error = "No fue posible validar la existencia de la tabla en la base de datos: " + ex.Message;
+                return false;
+            }
+        }
 
         private string IdentificarTipoTablaSeleccionada(string tabla)
         {
