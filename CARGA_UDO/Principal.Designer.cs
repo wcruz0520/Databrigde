@@ -63,10 +63,10 @@ namespace CARGA_UDO
             this.btnConectar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnConectar.IconSize = 32;
             this.btnConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConectar.Location = new System.Drawing.Point(719, 8);
+            this.btnConectar.Location = new System.Drawing.Point(742, 0);
             this.btnConectar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(148, 35);
+            this.btnConectar.Size = new System.Drawing.Size(146, 32);
             this.btnConectar.TabIndex = 0;
             this.btnConectar.Text = "Conectar";
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -261,7 +261,7 @@ namespace CARGA_UDO
             this.MIConfig});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(900, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(900, 32);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
             // 
