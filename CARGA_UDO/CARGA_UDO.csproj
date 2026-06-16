@@ -79,6 +79,7 @@
       <HintPath>..\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.IO.Compression" />
@@ -121,6 +122,7 @@
     <Compile Include="FrmLogCarga.Designer.cs">
       <DependentUpon>FrmLogCarga.cs</DependentUpon>
     </Compile>
+    <Compile Include="SapConnectionConfig.cs" />
     <Compile Include="Principal.cs">
       <SubType>Form</SubType>
     </Compile>

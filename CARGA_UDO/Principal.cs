@@ -39,22 +39,11 @@ namespace CARGA_UDO
         private void Principal_Load(object sender, EventArgs e)
         {
             strTest = Environment.GetCommandLineArgs();
-            strConnString = "0030002C0030002C00530041005000420044005F00440061007400650076002C0050004C006F006D0056004900490056";
-            if (string.IsNullOrEmpty(strConnString))
-            {
-                MessageBox.Show("El programa se debe ejecutar desde SAP Business One. (Carga udo -Err2)");
-                Environment.Exit(0);
-            }
+            ActualizarEstadoConexion(false);
 
-            if (ConectarSAP(strConnString))
+            if (SapConnectionConfig.IsConfigured())
             {
-                this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
-                this.btnProccess.Enabled = true;
-
-                this.btnConectar.Text = "Desconectar";
-                this.btnConectar.Enabled = true;
-                this.btnConectar.IconColor = Color.Green;
-                this.btnConectar.IconChar = IconChar.PlugCircleCheck;
+                ConectarSAP();
             }
 
             cmbTipoObj.Items.Clear();
@@ -105,76 +94,71 @@ namespace CARGA_UDO
             }
         }
 
-        private bool ConectarSAP(string connectionString)
+        private bool ConectarSAP()
         {
             try
             {
-                rSboGui = new SAPbouiCOM.SboGuiApi();
-                rSboGui.Connect(connectionString);
-                rSboApp = rSboGui.GetApplication();
-
-                // Crear objeto company desde cero
-                Globals.rCompany = new SAPbobsCOM.Company();
-
-                // Obtener cookie de contexto
-                sCookie = Globals.rCompany.GetContextCookie();
-
-                // Pasar el contexto de la sesión UI al objeto Company
-                ret = Globals.rCompany.SetSboLoginContext(rSboApp.Company.GetConnectionContext(sCookie));
-                if (ret != 0)
+                if (!SapConnectionConfig.IsConfigured())
                 {
-                    rSboApp.StatusBar.SetText("Error SetSboLoginContext: " + ret,
-                        SAPbouiCOM.BoMessageTime.bmt_Medium,
-                        SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    MessageBox.Show("Configure la conexión DI API antes de conectar.",
+                                    "Configuración requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ActualizarEstadoConexion(false);
                     return false;
                 }
 
-                // Conectar usando ese contexto
+                Globals.rCompany = new SAPbobsCOM.Company();
+                SapConnectionConfig.ApplyToCompany(Globals.rCompany);
+
                 ret = Globals.rCompany.Connect();
                 if (ret != 0)
                 {
                     Globals.rCompany.GetLastError(out int errorCode, out string errorMsg);
-                    rSboApp.StatusBar.SetText("Error al conectar DI API: " + errorMsg,
-                        SAPbouiCOM.BoMessageTime.bmt_Medium,
-                        SAPbouiCOM.BoStatusBarMessageType.smt_Error);
+                    Globals.rCompany = null;
+                    MessageBox.Show($"Error al conectar DI API ({errorCode}): {errorMsg}",
+                                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ActualizarEstadoConexion(false);
                     return false;
                 }
 
-                // Si todo va bien, mostrar info
-                rSboApp.StatusBar.SetText($"Conectado a {Globals.rCompany.CompanyName} ({Globals.rCompany.CompanyDB})",
-                    SAPbouiCOM.BoMessageTime.bmt_Short,
-                    SAPbouiCOM.BoStatusBarMessageType.smt_Success);
-
+                ActualizarEstadoConexion(true);
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Error conectando a SAP: " + ex.Message,
+                Globals.rCompany = null;
+                ActualizarEstadoConexion(false);
+                MessageBox.Show("Error conectando a SAP por DI API: " + ex.Message,
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+        }
+
+        private void ActualizarEstadoConexion(bool conectado)
+        {
+            if (conectado && Globals.rCompany != null && Globals.rCompany.Connected)
+            {
+                this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
+                this.btnConectar.Text = "Desconectar";
+                this.btnConectar.Enabled = true;
+                this.btnConectar.IconColor = Color.Green;
+                this.btnConectar.IconChar = IconChar.PlugCircleCheck;
+                this.btnProccess.Enabled = true;
+                return;
+            }
+
+            this.Text = "CARGA UDO (Desconectado)";
+            this.btnConectar.Text = "Conectar";
+            this.btnConectar.Enabled = true;
+            this.btnConectar.IconColor = Color.Red;
+            this.btnConectar.IconChar = IconChar.PlugCircleXmark;
+            this.btnProccess.Enabled = false;
         }
 
         private void btnConectar_Click(object sender, EventArgs e)
         {
             if (this.btnConectar.Text == "Conectar")
             {
-                if (string.IsNullOrEmpty(strConnString))
-                {
-                    MessageBox.Show("El programa se debe ejecutar desde SAP Business One. (Carga Reembolso -Err2)");
-                    Environment.Exit(0);
-                }
-
-                if (ConectarSAP(strConnString))
-                {
-                    this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
-                    //this.btnConnect.Enabled = false;
-                    this.btnConectar.Text = "Desconectar";
-                    this.btnConectar.IconChar = IconChar.PlugCircleCheck;
-                    this.btnProccess.Enabled = true;
-                    this.btnConectar.IconColor = Color.Green;
-                    //this.btnSimular.Enabled = true;
-                }
+                ConectarSAP();
             }
             else
             {
@@ -188,11 +172,7 @@ namespace CARGA_UDO
                         rSboGui = null;
                     }
 
-                    this.Text = "CARGA UDO (Desconectado)";
-                    this.btnConectar.Text = "Conectar";
-                    this.btnConectar.IconColor = Color.Red;
-                    this.btnConectar.IconChar = IconChar.PlugCircleXmark;
-                    this.btnProccess.Enabled = false;
+                    ActualizarEstadoConexion(false);
                     //this.btnSimular.Enabled = false;
 
                     //MessageBox.Show("Se ha desconectado de SAP correctamente.",
@@ -1390,7 +1370,14 @@ namespace CARGA_UDO
 
         private void MIConfig_Click(object sender, EventArgs e)
         {
-
+            using (var form = new ConfigForm())
+            {
+                if (form.ShowDialog(this) == DialogResult.OK &&
+                    (Globals.rCompany == null || !Globals.rCompany.Connected))
+                {
+                    ConectarSAP();
+                }
+            }
         }
     }
 
