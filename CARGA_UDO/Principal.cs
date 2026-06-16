@@ -51,7 +51,7 @@ namespace CARGA_UDO
                 this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
                 this.btnProccess.Enabled = true;
 
-                this.btnConectar.Text = "DESCONECTAR";
+                this.btnConectar.Text = "Desconectar";
                 this.btnConectar.Enabled = true;
                 this.btnConectar.IconColor = Color.Green;
                 this.btnConectar.IconChar = IconChar.PlugCircleCheck;
@@ -140,7 +140,7 @@ namespace CARGA_UDO
 
         private void btnConectar_Click(object sender, EventArgs e)
         {
-            if (this.btnConectar.Text == "CONECTAR")
+            if (this.btnConectar.Text == "Conectar")
             {
                 if (string.IsNullOrEmpty(strConnString))
                 {
@@ -152,7 +152,7 @@ namespace CARGA_UDO
                 {
                     this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
                     //this.btnConnect.Enabled = false;
-                    this.btnConectar.Text = "DESCONECTAR";
+                    this.btnConectar.Text = "Desconectar";
                     this.btnConectar.IconChar = IconChar.PlugCircleCheck;
                     this.btnProccess.Enabled = true;
                     this.btnConectar.IconColor = Color.Green;
@@ -172,7 +172,7 @@ namespace CARGA_UDO
                     }
 
                     this.Text = "CARGA UDO (Desconectado)";
-                    this.btnConectar.Text = "CONECTAR";
+                    this.btnConectar.Text = "Conectar";
                     this.btnConectar.IconColor = Color.Red;
                     this.btnConectar.IconChar = IconChar.PlugCircleXmark;
                     this.btnProccess.Enabled = false;
@@ -507,7 +507,7 @@ namespace CARGA_UDO
                     Application.DoEvents();
                 }
 
-                if (procesoCancelado || hayErrores)
+                if (procesoCancelado /*|| hayErrores*/)
                 {
                     if (transaccionIniciada)
                         FinalizarTransaccionSAP(false);
