@@ -61,14 +61,18 @@ namespace CARGA_UDO
 
             cmbTipoObj.DataSource = new List<KeyValuePair<string, string>>
             {
-                new KeyValuePair<string, string>("M", "Maestro"),
-                new KeyValuePair<string, string>("D", "Documento"),
-                new KeyValuePair<string, string>("NO", "No Objeto")
+                new KeyValuePair<string, string>("NO", "Ningún Objeto"),
+                new KeyValuePair<string, string>("M", "Datos Maestro"),
+                new KeyValuePair<string, string>("ML", "Filas de datos maestros"),
+                new KeyValuePair<string, string>("D", "Documentos"),
+                new KeyValuePair<string, string>("DL", "Filas de documentos"),
+                new KeyValuePair<string, string>("NOAI", "Ningún Objeto con incremento automático")
             };
 
             cmbTipoObj.DisplayMember = "Value";
             cmbTipoObj.ValueMember = "Key";
             cmbTipoObj.SelectedIndex = 0;
+            cmbTipoObj.Enabled = false;
 
             rdbAgregarActualizar.Checked = true;
         }
@@ -245,6 +249,7 @@ namespace CARGA_UDO
                 if (!string.IsNullOrWhiteSpace(primeraHoja))
                 {
                     txtTableName.Text = primeraHoja.Trim();
+                    IdentificarTipoTablaSeleccionada(txtTableName.Text);
                 }
 
                 var tabs = EnsureTabControlFor(placeholderGrid);
@@ -450,7 +455,7 @@ namespace CARGA_UDO
                 if (tabs == null || tabs.TabPages.Count == 0) return;
 
                 string objeto = txtTableName.Text.Trim();                 // UDO Code o tabla (según tu uso)
-                string tipoObj = cmbTipoObj.SelectedValue.ToString();     // "M", "D", "NO"
+                string tipoObj = IdentificarTipoTablaSeleccionada(objeto); // Tipo de tabla según OUTB
                 string modoCarga = ObtenerModoCargaSeleccionado(); // "I", "U", "A"
 
                 var gridCabecera = tabs.TabPages[0].Controls.OfType<DataGridView>().First();
@@ -523,12 +528,12 @@ namespace CARGA_UDO
                                 });
                             }
                         }
-                        else // "NO"
+                        else if (tipoObj == "NO" || tipoObj == "NOAI")
                         {
                             bool actualizado = ExisteRegistro_NoObjeto(objeto, cab.KeyValue);
                             if (DebeProcesarRegistro(modoCarga, actualizado, cab.KeyValue))
                             {
-                                Guardar_NoObjeto(objeto, cab);  // NO maneja hijos (si los necesitas dime y lo extendemos)
+                                Guardar_NoObjeto(objeto, cab, tipoObj == "NOAI");  // NO maneja hijos (si los necesitas dime y lo extendemos)
 
                                 if (!resultproceso) hayErrores = true;
                                 logCarga.Add(new ResultadoCarga
@@ -538,6 +543,16 @@ namespace CARGA_UDO
                                     Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
                                 });
                             }
+                        }
+                        else
+                        {
+                            hayErrores = true;
+                            logCarga.Add(new ResultadoCarga
+                            {
+                                Code = cab.KeyValue,
+                                Exitoso = false,
+                                Descripcion = "El tipo de tabla seleccionado corresponde a líneas y no se puede procesar como cabecera."
+                            });
                         }
                     }
                     catch (Exception ex)
@@ -596,6 +611,72 @@ namespace CARGA_UDO
         }
 
 
+
+        private string IdentificarTipoTablaSeleccionada(string tabla)
+        {
+            string tipoObj = ObtenerTipoTablaDesdeOUTB(tabla);
+
+            if (!string.IsNullOrWhiteSpace(tipoObj))
+            {
+                SeleccionarTipoObjeto(tipoObj);
+                return tipoObj;
+            }
+
+            SeleccionarTipoObjeto("NO");
+            return "NO";
+        }
+
+        private string ObtenerTipoTablaDesdeOUTB(string tabla)
+        {
+            if (string.IsNullOrWhiteSpace(tabla) || Globals.rCompany == null || !Globals.rCompany.Connected)
+                return null;
+
+            try
+            {
+                var rs = (SAPbobsCOM.Recordset)Globals.rCompany
+                    .GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+                bool esHana = Globals.rCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB;
+                string tablaSinArroba = tabla.Trim().TrimStart('@').Replace("'", "''");
+                string sql = esHana
+                    ? $"SELECT \"ObjectType\" FROM \"OUTB\" WHERE UPPER(\"TableName\") = UPPER('{tablaSinArroba}')"
+                    : $"SELECT [ObjectType] FROM [OUTB] WHERE UPPER([TableName]) = UPPER('{tablaSinArroba}')";
+
+                rs.DoQuery(sql);
+                if (rs.EoF)
+                    return null;
+
+                string objectType = rs.Fields.Item("ObjectType").Value?.ToString();
+                return MapearTipoTablaOUTB(objectType);
+            }
+            catch (Exception ex)
+            {
+                msg_error = "No fue posible identificar el tipo de tabla en OUTB: " + ex.Message;
+                return null;
+            }
+        }
+
+        private string MapearTipoTablaOUTB(string objectType)
+        {
+            switch ((objectType ?? string.Empty).Trim())
+            {
+                case "0": return "NO";
+                case "1": return "M";
+                case "2": return "ML";
+                case "3": return "D";
+                case "4": return "DL";
+                case "5": return "NOAI";
+                default: return null;
+            }
+        }
+
+        private void SeleccionarTipoObjeto(string tipoObj)
+        {
+            if (cmbTipoObj.DataSource == null || string.IsNullOrWhiteSpace(tipoObj))
+                return;
+
+            cmbTipoObj.SelectedValue = tipoObj;
+        }
 
         private bool DebeProcesarRegistro(string modoCarga, bool existe, string keyValue)
         {
@@ -664,19 +745,23 @@ namespace CARGA_UDO
             else
                 idxKey = FindColumnIndex(grid, "Code");
 
-            // Fallback: si no existe la columna, usa la primera
-            if (idxKey < 0) idxKey = 0;
+            // Fallback: para tablas con llave manual usa la primera columna.
+            // Para tablas con incremento automático, si no viene Code no quitamos
+            // ninguna columna de los campos porque SAP asigna la llave al insertar.
+            if (idxKey < 0 && tipoObj != "NOAI") idxKey = 0;
 
             foreach (DataGridViewRow row in grid.Rows)
             {
                 if (row.IsNewRow) continue;
 
                 var registro = new RegistroTabla();
-                registro.KeyValue = row.Cells[idxKey].Value?.ToString();
+                registro.KeyValue = idxKey >= 0
+                    ? row.Cells[idxKey].Value?.ToString()
+                    : (row.Index + 1).ToString();
 
                 for (int i = 0; i < grid.Columns.Count; i++)
                 {
-                    if (i == idxKey) continue;
+                    if (idxKey >= 0 && i == idxKey) continue;
 
                     var colName = grid.Columns[i].Name;
                     registro.Campos[colName] = row.Cells[i].Value;
@@ -1189,7 +1274,12 @@ namespace CARGA_UDO
             }
         }
 
-        private void Guardar_NoObjeto(string tabla, RegistroTabla reg)
+        private bool ExisteCampo(Dictionary<string, object> campos, string nombreCampo)
+        {
+            return campos.Keys.Any(k => string.Equals(k, nombreCampo, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private void Guardar_NoObjeto(string tabla, RegistroTabla reg, bool incrementoAutomatico = false)
         {
             try
             {
@@ -1200,9 +1290,14 @@ namespace CARGA_UDO
                 // armamos SET y columnas dinámicas
                 var campos = new Dictionary<string, object>(reg.Campos);
 
-                // Asegurar Code/Name si aplica (muchas UDT sin objeto igual tienen Code/Name)
-                if (!campos.ContainsKey("Code")) campos["Code"] = reg.KeyValue;
-                if (!campos.ContainsKey("Name")) campos["Name"] = reg.KeyValue;
+                // Asegurar Code/Name si aplica (muchas UDT sin objeto igual tienen Code/Name).
+                // En tablas sin objeto con incremento automático, SAP asigna Code en altas,
+                // por lo que solo lo enviamos si viene explícito en el archivo.
+                if (!incrementoAutomatico || ExisteCampo(campos, "Code"))
+                {
+                    if (!ExisteCampo(campos, "Code")) campos["Code"] = reg.KeyValue;
+                    if (!ExisteCampo(campos, "Name")) campos["Name"] = reg.KeyValue;
+                }
 
                 string SqlValue(object v)
                 {
