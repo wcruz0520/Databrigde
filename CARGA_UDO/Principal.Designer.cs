@@ -36,10 +36,14 @@ namespace CARGA_UDO
             this.btnCargar = new System.Windows.Forms.Button();
             this.txtTableName = new System.Windows.Forms.TextBox();
             this.cmbTipoObj = new System.Windows.Forms.ComboBox();
-            this.cmbModoCarga = new System.Windows.Forms.ComboBox();
+            this.grpModoCarga = new System.Windows.Forms.GroupBox();
+            this.rdbSoloAgregar = new System.Windows.Forms.RadioButton();
+            this.rdbSoloActualizar = new System.Windows.Forms.RadioButton();
+            this.rdbAgregarActualizar = new System.Windows.Forms.RadioButton();
             this.prgCarga = new System.Windows.Forms.ProgressBar();
             this.lblEstado = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
+            this.grpModoCarga.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnConectar
@@ -53,10 +57,10 @@ namespace CARGA_UDO
             this.btnConectar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnConectar.IconSize = 32;
             this.btnConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConectar.Location = new System.Drawing.Point(684, 45);
+            this.btnConectar.Location = new System.Drawing.Point(684, 8);
             this.btnConectar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(183, 46);
+            this.btnConectar.Size = new System.Drawing.Size(183, 35);
             this.btnConectar.TabIndex = 0;
             this.btnConectar.Text = "Conectar";
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -156,16 +160,56 @@ namespace CARGA_UDO
             this.cmbTipoObj.Size = new System.Drawing.Size(186, 33);
             this.cmbTipoObj.TabIndex = 5;
             //
-            // cmbModoCarga
+            // grpModoCarga
             //
-            this.cmbModoCarga.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbModoCarga.FormattingEnabled = true;
-            this.cmbModoCarga.Location = new System.Drawing.Point(596, 56);
-            this.cmbModoCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.cmbModoCarga.Name = "cmbModoCarga";
-            this.cmbModoCarga.Size = new System.Drawing.Size(271, 33);
-            this.cmbModoCarga.TabIndex = 9;
+            this.grpModoCarga.Controls.Add(this.rdbAgregarActualizar);
+            this.grpModoCarga.Controls.Add(this.rdbSoloActualizar);
+            this.grpModoCarga.Controls.Add(this.rdbSoloAgregar);
+            this.grpModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.grpModoCarga.Location = new System.Drawing.Point(596, 45);
+            this.grpModoCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.grpModoCarga.Name = "grpModoCarga";
+            this.grpModoCarga.Padding = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.grpModoCarga.Size = new System.Drawing.Size(271, 62);
+            this.grpModoCarga.TabIndex = 9;
+            this.grpModoCarga.TabStop = false;
+            this.grpModoCarga.Text = "Modo de carga";
+            //
+            // rdbSoloAgregar
+            //
+            this.rdbSoloAgregar.AutoSize = true;
+            this.rdbSoloAgregar.Location = new System.Drawing.Point(9, 22);
+            this.rdbSoloAgregar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdbSoloAgregar.Name = "rdbSoloAgregar";
+            this.rdbSoloAgregar.Size = new System.Drawing.Size(73, 21);
+            this.rdbSoloAgregar.TabIndex = 0;
+            this.rdbSoloAgregar.TabStop = true;
+            this.rdbSoloAgregar.Text = "Agregar";
+            this.rdbSoloAgregar.UseVisualStyleBackColor = true;
+            //
+            // rdbSoloActualizar
+            //
+            this.rdbSoloActualizar.AutoSize = true;
+            this.rdbSoloActualizar.Location = new System.Drawing.Point(88, 22);
+            this.rdbSoloActualizar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdbSoloActualizar.Name = "rdbSoloActualizar";
+            this.rdbSoloActualizar.Size = new System.Drawing.Size(86, 21);
+            this.rdbSoloActualizar.TabIndex = 1;
+            this.rdbSoloActualizar.TabStop = true;
+            this.rdbSoloActualizar.Text = "Actualizar";
+            this.rdbSoloActualizar.UseVisualStyleBackColor = true;
+            //
+            // rdbAgregarActualizar
+            //
+            this.rdbAgregarActualizar.AutoSize = true;
+            this.rdbAgregarActualizar.Location = new System.Drawing.Point(180, 22);
+            this.rdbAgregarActualizar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.rdbAgregarActualizar.Name = "rdbAgregarActualizar";
+            this.rdbAgregarActualizar.Size = new System.Drawing.Size(75, 21);
+            this.rdbAgregarActualizar.TabIndex = 2;
+            this.rdbAgregarActualizar.TabStop = true;
+            this.rdbAgregarActualizar.Text = "Ambos";
+            this.rdbAgregarActualizar.UseVisualStyleBackColor = true;
             //
             // prgCarga
             //
@@ -191,7 +235,7 @@ namespace CARGA_UDO
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 562);
-            this.Controls.Add(this.cmbModoCarga);
+            this.Controls.Add(this.grpModoCarga);
             this.Controls.Add(this.btnDetener);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.prgCarga);
@@ -206,6 +250,8 @@ namespace CARGA_UDO
             this.Text = "Principal";
             this.Load += new System.EventHandler(this.Principal_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).EndInit();
+            this.grpModoCarga.ResumeLayout(false);
+            this.grpModoCarga.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,7 +266,10 @@ namespace CARGA_UDO
         private System.Windows.Forms.Button btnCargar;
         private System.Windows.Forms.TextBox txtTableName;
         private System.Windows.Forms.ComboBox cmbTipoObj;
-        private System.Windows.Forms.ComboBox cmbModoCarga;
+        private System.Windows.Forms.GroupBox grpModoCarga;
+        private System.Windows.Forms.RadioButton rdbSoloAgregar;
+        private System.Windows.Forms.RadioButton rdbSoloActualizar;
+        private System.Windows.Forms.RadioButton rdbAgregarActualizar;
         private System.Windows.Forms.ProgressBar prgCarga;
         private System.Windows.Forms.Label lblEstado;
     }

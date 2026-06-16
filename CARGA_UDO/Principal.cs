@@ -70,17 +70,18 @@ namespace CARGA_UDO
             cmbTipoObj.ValueMember = "Key";
             cmbTipoObj.SelectedIndex = 0;
 
-            cmbModoCarga.Items.Clear();
-            cmbModoCarga.DataSource = new List<KeyValuePair<string, string>>
-            {
-                new KeyValuePair<string, string>("I", "Solo agregar registro"),
-                new KeyValuePair<string, string>("U", "Solo actualizar registros"),
-                new KeyValuePair<string, string>("A", "Agregar registros y actualizar existentes")
-            };
+            rdbAgregarActualizar.Checked = true;
+        }
 
-            cmbModoCarga.DisplayMember = "Value";
-            cmbModoCarga.ValueMember = "Key";
-            cmbModoCarga.SelectedIndex = 2;
+        private string ObtenerModoCargaSeleccionado()
+        {
+            if (rdbSoloAgregar.Checked)
+                return "I";
+
+            if (rdbSoloActualizar.Checked)
+                return "U";
+
+            return "A";
         }
 
         private string ObtenerCadenaConexionSAP()
@@ -422,7 +423,7 @@ namespace CARGA_UDO
 
                 string objeto = txtTableName.Text.Trim();                 // UDO Code o tabla (según tu uso)
                 string tipoObj = cmbTipoObj.SelectedValue.ToString();     // "M", "D", "NO"
-                string modoCarga = cmbModoCarga.SelectedValue.ToString(); // "I", "U", "A"
+                string modoCarga = ObtenerModoCargaSeleccionado(); // "I", "U", "A"
 
                 var gridCabecera = tabs.TabPages[0].Controls.OfType<DataGridView>().First();
 
