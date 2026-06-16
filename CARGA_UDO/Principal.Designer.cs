@@ -48,15 +48,16 @@ namespace CARGA_UDO
             this.btnConectar.BackColor = System.Drawing.Color.Gainsboro;
             this.btnConectar.FlatAppearance.BorderSize = 0;
             this.btnConectar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnConectar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnConectar.IconChar = FontAwesome.Sharp.IconChar.PlugCircleXmark;
             this.btnConectar.IconColor = System.Drawing.Color.Red;
             this.btnConectar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnConectar.IconSize = 32;
             this.btnConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConectar.Location = new System.Drawing.Point(684, 45);
+            this.btnConectar.Location = new System.Drawing.Point(722, 24);
             this.btnConectar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(183, 46);
+            this.btnConectar.Size = new System.Drawing.Size(147, 34);
             this.btnConectar.TabIndex = 0;
             this.btnConectar.Text = "Conectar";
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -69,15 +70,16 @@ namespace CARGA_UDO
             this.btnProccess.BackColor = System.Drawing.Color.Gainsboro;
             this.btnProccess.FlatAppearance.BorderSize = 0;
             this.btnProccess.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnProccess.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnProccess.IconChar = FontAwesome.Sharp.IconChar.Play;
             this.btnProccess.IconColor = System.Drawing.Color.Green;
             this.btnProccess.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnProccess.IconSize = 32;
             this.btnProccess.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnProccess.Location = new System.Drawing.Point(33, 488);
+            this.btnProccess.Location = new System.Drawing.Point(33, 506);
             this.btnProccess.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnProccess.Name = "btnProccess";
-            this.btnProccess.Size = new System.Drawing.Size(159, 49);
+            this.btnProccess.Size = new System.Drawing.Size(138, 34);
             this.btnProccess.TabIndex = 1;
             this.btnProccess.Text = "Procesar";
             this.btnProccess.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -91,15 +93,16 @@ namespace CARGA_UDO
             this.btnDetener.Enabled = false;
             this.btnDetener.FlatAppearance.BorderSize = 0;
             this.btnDetener.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDetener.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnDetener.IconChar = FontAwesome.Sharp.IconChar.Stop;
             this.btnDetener.IconColor = System.Drawing.Color.Red;
             this.btnDetener.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnDetener.IconSize = 32;
             this.btnDetener.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnDetener.Location = new System.Drawing.Point(198, 488);
+            this.btnDetener.Location = new System.Drawing.Point(188, 506);
             this.btnDetener.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnDetener.Name = "btnDetener";
-            this.btnDetener.Size = new System.Drawing.Size(159, 49);
+            this.btnDetener.Size = new System.Drawing.Size(143, 34);
             this.btnDetener.TabIndex = 8;
             this.btnDetener.Text = "Detener";
             this.btnDetener.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -114,20 +117,20 @@ namespace CARGA_UDO
             this.dtgRegistros.BackgroundColor = System.Drawing.Color.White;
             this.dtgRegistros.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.dtgRegistros.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dtgRegistros.Location = new System.Drawing.Point(33, 115);
+            this.dtgRegistros.Location = new System.Drawing.Point(34, 75);
             this.dtgRegistros.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.dtgRegistros.Name = "dtgRegistros";
             this.dtgRegistros.RowHeadersWidth = 51;
             this.dtgRegistros.RowTemplate.Height = 24;
-            this.dtgRegistros.Size = new System.Drawing.Size(835, 350);
+            this.dtgRegistros.Size = new System.Drawing.Size(835, 397);
             this.dtgRegistros.TabIndex = 2;
             // 
             // btnCargar
             // 
-            this.btnCargar.Location = new System.Drawing.Point(33, 45);
+            this.btnCargar.Location = new System.Drawing.Point(34, 24);
             this.btnCargar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCargar.Name = "btnCargar";
-            this.btnCargar.Size = new System.Drawing.Size(51, 42);
+            this.btnCargar.Size = new System.Drawing.Size(40, 34);
             this.btnCargar.TabIndex = 3;
             this.btnCargar.Text = "📁";
             this.btnCargar.UseVisualStyleBackColor = true;
@@ -139,10 +142,10 @@ namespace CARGA_UDO
             this.txtTableName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTableName.Enabled = false;
             this.txtTableName.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtTableName.Location = new System.Drawing.Point(145, 60);
+            this.txtTableName.Location = new System.Drawing.Point(82, 28);
             this.txtTableName.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.txtTableName.Name = "txtTableName";
-            this.txtTableName.Size = new System.Drawing.Size(237, 24);
+            this.txtTableName.Size = new System.Drawing.Size(227, 24);
             this.txtTableName.TabIndex = 4;
             // 
             // cmbTipoObj
@@ -150,37 +153,37 @@ namespace CARGA_UDO
             this.cmbTipoObj.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipoObj.FormattingEnabled = true;
-            this.cmbTipoObj.Location = new System.Drawing.Point(404, 56);
+            this.cmbTipoObj.Location = new System.Drawing.Point(318, 24);
             this.cmbTipoObj.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cmbTipoObj.Name = "cmbTipoObj";
             this.cmbTipoObj.Size = new System.Drawing.Size(186, 33);
             this.cmbTipoObj.TabIndex = 5;
-            //
+            // 
             // cmbModoCarga
-            //
+            // 
             this.cmbModoCarga.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbModoCarga.FormattingEnabled = true;
-            this.cmbModoCarga.Location = new System.Drawing.Point(596, 56);
+            this.cmbModoCarga.Location = new System.Drawing.Point(514, 24);
             this.cmbModoCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cmbModoCarga.Name = "cmbModoCarga";
-            this.cmbModoCarga.Size = new System.Drawing.Size(271, 33);
+            this.cmbModoCarga.Size = new System.Drawing.Size(198, 33);
             this.cmbModoCarga.TabIndex = 9;
-            //
+            // 
             // prgCarga
-            //
+            // 
             this.prgCarga.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.prgCarga.Location = new System.Drawing.Point(390, 506);
+            this.prgCarga.Location = new System.Drawing.Point(355, 506);
             this.prgCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.prgCarga.Name = "prgCarga";
-            this.prgCarga.Size = new System.Drawing.Size(477, 29);
+            this.prgCarga.Size = new System.Drawing.Size(514, 29);
             this.prgCarga.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.prgCarga.TabIndex = 6;
             // 
             // lblEstado
             // 
             this.lblEstado.AutoSize = true;
-            this.lblEstado.Location = new System.Drawing.Point(390, 474);
+            this.lblEstado.Location = new System.Drawing.Point(360, 476);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(0, 20);
             this.lblEstado.TabIndex = 7;
