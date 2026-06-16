@@ -31,6 +31,7 @@ namespace CARGA_UDO
         {
             this.btnConectar = new FontAwesome.Sharp.IconButton();
             this.btnProccess = new FontAwesome.Sharp.IconButton();
+            this.btnDetener = new FontAwesome.Sharp.IconButton();
             this.dtgRegistros = new System.Windows.Forms.DataGridView();
             this.btnCargar = new System.Windows.Forms.Button();
             this.txtTableName = new System.Windows.Forms.TextBox();
@@ -39,9 +40,9 @@ namespace CARGA_UDO
             this.lblEstado = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
             this.SuspendLayout();
-            // 
+            //
             // btnConectar
-            // 
+            //
             this.btnConectar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnConectar.BackColor = System.Drawing.Color.Gainsboro;
             this.btnConectar.FlatAppearance.BorderSize = 0;
@@ -59,9 +60,9 @@ namespace CARGA_UDO
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnConectar.UseVisualStyleBackColor = false;
             this.btnConectar.Click += new System.EventHandler(this.btnConectar_Click);
-            // 
+            //
             // btnProccess
-            // 
+            //
             this.btnProccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnProccess.BackColor = System.Drawing.Color.Gainsboro;
             this.btnProccess.FlatAppearance.BorderSize = 0;
@@ -79,11 +80,32 @@ namespace CARGA_UDO
             this.btnProccess.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnProccess.UseVisualStyleBackColor = false;
             this.btnProccess.Click += new System.EventHandler(this.btnProccess_Click);
-            // 
+            //
+            // btnDetener
+            //
+            this.btnDetener.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnDetener.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnDetener.Enabled = false;
+            this.btnDetener.FlatAppearance.BorderSize = 0;
+            this.btnDetener.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDetener.IconChar = FontAwesome.Sharp.IconChar.Stop;
+            this.btnDetener.IconColor = System.Drawing.Color.Red;
+            this.btnDetener.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnDetener.IconSize = 32;
+            this.btnDetener.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.btnDetener.Location = new System.Drawing.Point(176, 390);
+            this.btnDetener.Name = "btnDetener";
+            this.btnDetener.Size = new System.Drawing.Size(141, 39);
+            this.btnDetener.TabIndex = 8;
+            this.btnDetener.Text = "DETENER";
+            this.btnDetener.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnDetener.UseVisualStyleBackColor = false;
+            this.btnDetener.Click += new System.EventHandler(this.btnDetener_Click);
+            //
             // dtgRegistros
-            // 
-            this.dtgRegistros.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            //
+            this.dtgRegistros.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtgRegistros.BackgroundColor = System.Drawing.Color.White;
             this.dtgRegistros.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -94,9 +116,9 @@ namespace CARGA_UDO
             this.dtgRegistros.RowTemplate.Height = 24;
             this.dtgRegistros.Size = new System.Drawing.Size(742, 280);
             this.dtgRegistros.TabIndex = 2;
-            // 
+            //
             // btnCargar
-            // 
+            //
             this.btnCargar.Location = new System.Drawing.Point(29, 45);
             this.btnCargar.Name = "btnCargar";
             this.btnCargar.Size = new System.Drawing.Size(45, 25);
@@ -104,9 +126,9 @@ namespace CARGA_UDO
             this.btnCargar.Text = "---";
             this.btnCargar.UseVisualStyleBackColor = true;
             this.btnCargar.Click += new System.EventHandler(this.btnCargar_Click);
-            // 
+            //
             // txtTableName
-            // 
+            //
             this.txtTableName.BackColor = System.Drawing.Color.White;
             this.txtTableName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTableName.Enabled = false;
@@ -115,39 +137,40 @@ namespace CARGA_UDO
             this.txtTableName.Name = "txtTableName";
             this.txtTableName.Size = new System.Drawing.Size(211, 20);
             this.txtTableName.TabIndex = 4;
-            // 
+            //
             // cmbTipoObj
-            // 
+            //
             this.cmbTipoObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipoObj.FormattingEnabled = true;
             this.cmbTipoObj.Location = new System.Drawing.Point(347, 45);
             this.cmbTipoObj.Name = "cmbTipoObj";
             this.cmbTipoObj.Size = new System.Drawing.Size(121, 28);
             this.cmbTipoObj.TabIndex = 5;
-            // 
+            //
             // prgCarga
-            // 
+            //
             this.prgCarga.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.prgCarga.Location = new System.Drawing.Point(226, 405);
+            this.prgCarga.Location = new System.Drawing.Point(347, 405);
             this.prgCarga.Name = "prgCarga";
-            this.prgCarga.Size = new System.Drawing.Size(545, 23);
+            this.prgCarga.Size = new System.Drawing.Size(424, 23);
             this.prgCarga.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.prgCarga.TabIndex = 6;
-            // 
+            //
             // lblEstado
-            // 
+            //
             this.lblEstado.AutoSize = true;
-            this.lblEstado.Location = new System.Drawing.Point(226, 379);
+            this.lblEstado.Location = new System.Drawing.Point(347, 379);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(0, 17);
             this.lblEstado.TabIndex = 7;
-            // 
+            //
             // Principal
-            // 
+            //
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnDetener);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.prgCarga);
             this.Controls.Add(this.cmbTipoObj);
@@ -169,6 +192,7 @@ namespace CARGA_UDO
 
         private FontAwesome.Sharp.IconButton btnConectar;
         private FontAwesome.Sharp.IconButton btnProccess;
+        private FontAwesome.Sharp.IconButton btnDetener;
         private System.Windows.Forms.DataGridView dtgRegistros;
         private System.Windows.Forms.Button btnCargar;
         private System.Windows.Forms.TextBox txtTableName;

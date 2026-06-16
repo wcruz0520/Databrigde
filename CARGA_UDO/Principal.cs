@@ -24,6 +24,7 @@ namespace CARGA_UDO
         public string strSQL;
         public bool resultproceso = false;
         public string msg_error = "";
+        private bool cancelarProceso = false;
 
         public SAPbouiCOM.Application rSboApp;
         public SAPbouiCOM.SboGuiApi rSboGui;
@@ -65,8 +66,8 @@ namespace CARGA_UDO
                 new KeyValuePair<string, string>("NO", "No Objeto")
             };
 
-            cmbTipoObj.DisplayMember = "Value"; 
-            cmbTipoObj.ValueMember = "Key";     
+            cmbTipoObj.DisplayMember = "Value";
+            cmbTipoObj.ValueMember = "Key";
             cmbTipoObj.SelectedIndex = 0;
         }
 
@@ -396,6 +397,11 @@ namespace CARGA_UDO
             prgCarga.Value = 0;
             lblEstado.Text = "Iniciando carga...";
             btnProccess.Enabled = false;
+            btnDetener.Enabled = true;
+            cancelarProceso = false;
+            bool transaccionIniciada = false;
+            bool procesoCancelado = false;
+            bool hayErrores = false;
 
             try
             {
@@ -413,8 +419,21 @@ namespace CARGA_UDO
                 int total = registrosCabecera.Count;
                 int procesados = 0;
 
+                if (total == 0)
+                {
+                    lblEstado.Text = "No hay registros para procesar";
+                    return;
+                }
+
+                transaccionIniciada = IniciarTransaccionSAP();
+
                 foreach (var cab in registrosCabecera)
                 {
+                    if (cancelarProceso)
+                    {
+                        procesoCancelado = true;
+                        break;
+                    }
                     try
                     {
                         var hijos = new List<(string tablaHija, List<RegistroTabla> registros)>();
@@ -435,6 +454,7 @@ namespace CARGA_UDO
                             bool actualizado = ExisteRegistro_Maestro(objeto, cab.KeyValue);
                             Guardar_Maestro(objeto, cab, hijos);
 
+                            if (!resultproceso) hayErrores = true;
                             logCarga.Add(new ResultadoCarga
                             {
                                 Code = cab.KeyValue,
@@ -447,6 +467,7 @@ namespace CARGA_UDO
                             bool actualizado = ExisteRegistro_Documento(objeto, cab.KeyValue);
                             Guardar_Documento(objeto, cab, hijos);
 
+                            if (!resultproceso) hayErrores = true;
                             logCarga.Add(new ResultadoCarga
                             {
                                 Code = cab.KeyValue, // aquí realmente es DocEntry
@@ -459,6 +480,7 @@ namespace CARGA_UDO
                             bool actualizado = ExisteRegistro_NoObjeto(objeto, cab.KeyValue);
                             Guardar_NoObjeto(objeto, cab);  // NO maneja hijos (si los necesitas dime y lo extendemos)
 
+                            if (!resultproceso) hayErrores = true;
                             logCarga.Add(new ResultadoCarga
                             {
                                 Code = cab.KeyValue,
@@ -469,6 +491,7 @@ namespace CARGA_UDO
                     }
                     catch (Exception ex)
                     {
+                        hayErrores = true;
                         logCarga.Add(new ResultadoCarga
                         {
                             Code = cab.KeyValue,
@@ -484,18 +507,70 @@ namespace CARGA_UDO
                     Application.DoEvents();
                 }
 
-                lblEstado.Text = "Carga finalizada";
+                if (procesoCancelado || hayErrores)
+                {
+                    if (transaccionIniciada)
+                        FinalizarTransaccionSAP(false);
+                    transaccionIniciada = false;
+                    lblEstado.Text = procesoCancelado
+                        ? "Proceso detenido. Se aplicó rollback."
+                        : "Carga con errores. Se aplicó rollback.";
+                }
+                else
+                {
+                    if (transaccionIniciada)
+                        FinalizarTransaccionSAP(true);
+                    transaccionIniciada = false;
+                    lblEstado.Text = "Carga finalizada. Se aplicó commit.";
+                }
+
                 MostrarPantallaLog();
             }
-            catch
+            catch (Exception ex)
             {
+                if (transaccionIniciada)
+                    FinalizarTransaccionSAP(false);
 
+                lblEstado.Text = "Error en la carga. Se aplicó rollback.";
+                MessageBox.Show("Error en el proceso: " + ex.Message,
+                                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
                 btnProccess.Enabled = true;
+                btnDetener.Enabled = false;
+                cancelarProceso = false;
             }
-            
+
+        }
+
+
+        private void btnDetener_Click(object sender, EventArgs e)
+        {
+            cancelarProceso = true;
+            btnDetener.Enabled = false;
+            lblEstado.Text = "Deteniendo proceso...";
+        }
+
+        private bool IniciarTransaccionSAP()
+        {
+            if (Globals.rCompany != null && Globals.rCompany.Connected && !Globals.rCompany.InTransaction)
+            {
+                Globals.rCompany.StartTransaction();
+                return true;
+            }
+
+            return false;
+        }
+
+        private void FinalizarTransaccionSAP(bool confirmar)
+        {
+            if (Globals.rCompany == null || !Globals.rCompany.Connected || !Globals.rCompany.InTransaction)
+                return;
+
+            Globals.rCompany.EndTransaction(confirmar
+                ? SAPbobsCOM.BoWfTransOpt.wf_Commit
+                : SAPbobsCOM.BoWfTransOpt.wf_RollBack);
         }
 
         private List<RegistroTabla> LeerRegistrosDesdeGrid(DataGridView grid, string tipoObj)
@@ -636,7 +711,7 @@ namespace CARGA_UDO
         //        //MessageBox.Show("Error al guardar: " + ex.Message,
         //        //                "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         //    }
-            
+
         //}
 
         private void MostrarPantallaLog()
