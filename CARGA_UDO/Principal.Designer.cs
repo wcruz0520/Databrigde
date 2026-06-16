@@ -36,6 +36,7 @@ namespace CARGA_UDO
             this.btnCargar = new System.Windows.Forms.Button();
             this.txtTableName = new System.Windows.Forms.TextBox();
             this.cmbTipoObj = new System.Windows.Forms.ComboBox();
+            this.cmbModoCarga = new System.Windows.Forms.ComboBox();
             this.prgCarga = new System.Windows.Forms.ProgressBar();
             this.lblEstado = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
@@ -154,9 +155,20 @@ namespace CARGA_UDO
             this.cmbTipoObj.Name = "cmbTipoObj";
             this.cmbTipoObj.Size = new System.Drawing.Size(186, 33);
             this.cmbTipoObj.TabIndex = 5;
-            // 
+            //
+            // cmbModoCarga
+            //
+            this.cmbModoCarga.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbModoCarga.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbModoCarga.FormattingEnabled = true;
+            this.cmbModoCarga.Location = new System.Drawing.Point(596, 56);
+            this.cmbModoCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.cmbModoCarga.Name = "cmbModoCarga";
+            this.cmbModoCarga.Size = new System.Drawing.Size(271, 33);
+            this.cmbModoCarga.TabIndex = 9;
+            //
             // prgCarga
-            // 
+            //
             this.prgCarga.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.prgCarga.Location = new System.Drawing.Point(390, 506);
             this.prgCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -179,6 +191,7 @@ namespace CARGA_UDO
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 562);
+            this.Controls.Add(this.cmbModoCarga);
             this.Controls.Add(this.btnDetener);
             this.Controls.Add(this.lblEstado);
             this.Controls.Add(this.prgCarga);
@@ -207,6 +220,7 @@ namespace CARGA_UDO
         private System.Windows.Forms.Button btnCargar;
         private System.Windows.Forms.TextBox txtTableName;
         private System.Windows.Forms.ComboBox cmbTipoObj;
+        private System.Windows.Forms.ComboBox cmbModoCarga;
         private System.Windows.Forms.ProgressBar prgCarga;
         private System.Windows.Forms.Label lblEstado;
     }

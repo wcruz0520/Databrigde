@@ -69,6 +69,18 @@ namespace CARGA_UDO
             cmbTipoObj.DisplayMember = "Value";
             cmbTipoObj.ValueMember = "Key";
             cmbTipoObj.SelectedIndex = 0;
+
+            cmbModoCarga.Items.Clear();
+            cmbModoCarga.DataSource = new List<KeyValuePair<string, string>>
+            {
+                new KeyValuePair<string, string>("I", "Solo agregar registro"),
+                new KeyValuePair<string, string>("U", "Solo actualizar registros"),
+                new KeyValuePair<string, string>("A", "Agregar registros y actualizar existentes")
+            };
+
+            cmbModoCarga.DisplayMember = "Value";
+            cmbModoCarga.ValueMember = "Key";
+            cmbModoCarga.SelectedIndex = 2;
         }
 
         private string ObtenerCadenaConexionSAP()
@@ -410,6 +422,7 @@ namespace CARGA_UDO
 
                 string objeto = txtTableName.Text.Trim();                 // UDO Code o tabla (según tu uso)
                 string tipoObj = cmbTipoObj.SelectedValue.ToString();     // "M", "D", "NO"
+                string modoCarga = cmbModoCarga.SelectedValue.ToString(); // "I", "U", "A"
 
                 var gridCabecera = tabs.TabPages[0].Controls.OfType<DataGridView>().First();
 
@@ -452,41 +465,50 @@ namespace CARGA_UDO
                         if (tipoObj == "M")
                         {
                             bool actualizado = ExisteRegistro_Maestro(objeto, cab.KeyValue);
-                            Guardar_Maestro(objeto, cab, hijos);
-
-                            if (!resultproceso) hayErrores = true;
-                            logCarga.Add(new ResultadoCarga
+                            if (DebeProcesarRegistro(modoCarga, actualizado, cab.KeyValue))
                             {
-                                Code = cab.KeyValue,
-                                Exitoso = resultproceso,
-                                Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
-                            });
+                                Guardar_Maestro(objeto, cab, hijos);
+
+                                if (!resultproceso) hayErrores = true;
+                                logCarga.Add(new ResultadoCarga
+                                {
+                                    Code = cab.KeyValue,
+                                    Exitoso = resultproceso,
+                                    Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
+                                });
+                            }
                         }
                         else if (tipoObj == "D")
                         {
                             bool actualizado = ExisteRegistro_Documento(objeto, cab.KeyValue);
-                            Guardar_Documento(objeto, cab, hijos);
-
-                            if (!resultproceso) hayErrores = true;
-                            logCarga.Add(new ResultadoCarga
+                            if (DebeProcesarRegistro(modoCarga, actualizado, cab.KeyValue))
                             {
-                                Code = cab.KeyValue, // aquí realmente es DocEntry
-                                Exitoso = resultproceso,
-                                Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
-                            });
+                                Guardar_Documento(objeto, cab, hijos);
+
+                                if (!resultproceso) hayErrores = true;
+                                logCarga.Add(new ResultadoCarga
+                                {
+                                    Code = cab.KeyValue, // aquí realmente es DocEntry
+                                    Exitoso = resultproceso,
+                                    Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
+                                });
+                            }
                         }
                         else // "NO"
                         {
                             bool actualizado = ExisteRegistro_NoObjeto(objeto, cab.KeyValue);
-                            Guardar_NoObjeto(objeto, cab);  // NO maneja hijos (si los necesitas dime y lo extendemos)
-
-                            if (!resultproceso) hayErrores = true;
-                            logCarga.Add(new ResultadoCarga
+                            if (DebeProcesarRegistro(modoCarga, actualizado, cab.KeyValue))
                             {
-                                Code = cab.KeyValue,
-                                Exitoso = resultproceso,
-                                Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
-                            });
+                                Guardar_NoObjeto(objeto, cab);  // NO maneja hijos (si los necesitas dime y lo extendemos)
+
+                                if (!resultproceso) hayErrores = true;
+                                logCarga.Add(new ResultadoCarga
+                                {
+                                    Code = cab.KeyValue,
+                                    Exitoso = resultproceso,
+                                    Descripcion = resultproceso ? (actualizado ? "Actualizado exitosamente" : "Creado exitosamente") : msg_error
+                                });
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -544,6 +566,34 @@ namespace CARGA_UDO
 
         }
 
+
+
+        private bool DebeProcesarRegistro(string modoCarga, bool existe, string keyValue)
+        {
+            if (modoCarga == "I" && existe)
+            {
+                logCarga.Add(new ResultadoCarga
+                {
+                    Code = keyValue,
+                    Exitoso = true,
+                    Descripcion = "Omitido: el registro ya existe y se seleccionó solo agregar registro"
+                });
+                return false;
+            }
+
+            if (modoCarga == "U" && !existe)
+            {
+                logCarga.Add(new ResultadoCarga
+                {
+                    Code = keyValue,
+                    Exitoso = true,
+                    Descripcion = "Omitido: el registro no existe y se seleccionó solo actualizar registros"
+                });
+                return false;
+            }
+
+            return true;
+        }
 
         private void btnDetener_Click(object sender, EventArgs e)
         {
