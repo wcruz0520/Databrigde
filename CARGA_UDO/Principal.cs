@@ -137,26 +137,32 @@ namespace CARGA_UDO
         {
             if (conectado && Globals.rCompany != null && Globals.rCompany.Connected)
             {
-                this.Text = $"CARGA UDO {Globals.rCompany.CompanyName.ToString().ToUpper()}";
-                this.btnConectar.Text = "Desconectar";
+                this.Text = $"Databrigde (conectado a {Globals.rCompany.CompanyDB} - {Globals.rCompany.UserName})";//$"Databrigde {Globals.rCompany.CompanyName.ToString().ToUpper()}";
+                this.btnConectar.Text = "";
                 this.btnConectar.Enabled = true;
-                this.btnConectar.IconColor = Color.Green;
-                this.btnConectar.IconChar = IconChar.PlugCircleCheck;
+                this.btnConectar.IconColor = Color.Red;
+                this.btnConectar.IconChar = IconChar.PlugCircleXmark;
                 this.btnProccess.Enabled = true;
+                //this.txtBoxBD.Text = $"Compania: {Globals.rCompany.CompanyDB}";
+                //this.txtBoxUser.Text = $"Usuario: {Globals.rCompany.UserName}";
+                //this.txtBoxBD.Enabled = false;
+                //this.txtBoxUser.Enabled = false;
                 return;
             }
 
-            this.Text = "CARGA UDO (Desconectado)";
-            this.btnConectar.Text = "Conectar";
+            this.Text = "Databrigde (desconectado)";
+            this.btnConectar.Text = "";
             this.btnConectar.Enabled = true;
-            this.btnConectar.IconColor = Color.Red;
-            this.btnConectar.IconChar = IconChar.PlugCircleXmark;
+            this.btnConectar.IconColor = Color.Green;
+            this.btnConectar.IconChar = IconChar.PlugCircleCheck;
             this.btnProccess.Enabled = false;
+            //this.txtBoxBD.Text = $"Compania: ";
+            //this.txtBoxUser.Text = $"Usuario: ";
         }
 
         private void btnConectar_Click(object sender, EventArgs e)
         {
-            if (this.btnConectar.Text == "Conectar")
+            if (this.btnConectar.IconChar == IconChar.PlugCircleCheck)
             {
                 ConectarSAP();
             }
@@ -1363,11 +1369,6 @@ namespace CARGA_UDO
             }
         }
 
-        private void toolStripMenuItem1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void MIConfig_Click(object sender, EventArgs e)
         {
             using (var form = new ConfigForm())
@@ -1379,6 +1380,7 @@ namespace CARGA_UDO
                 }
             }
         }
+
     }
 
     public class RegistroTabla

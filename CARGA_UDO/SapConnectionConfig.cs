@@ -44,11 +44,13 @@ namespace CARGA_UDO
             company.LicenseServer = GetValue(LicenseServerKey);
             company.CompanyDB = GetValue(CompanyDbKey);
             company.DbServerType = GetDbServerType();
-            company.DbUserName = GetValue(DbUserKey);
-            company.DbPassword = GetValue(DbPasswordKey);
             company.UserName = GetValue(SapUserKey);
             company.Password = GetValue(SapPasswordKey);
-            company.language = SAPbobsCOM.BoSuppLangs.ln_Spanish_La;
+            company.DbUserName = GetValue(DbUserKey);
+            company.DbPassword = GetValue(DbPasswordKey);
+            company.UseTrusted = true;
+            company.SLDServer = GetValue(LicenseServerKey);
+            //company.language = SAPbobsCOM.BoSuppLangs.ln_Spanish_La;
         }
 
         public static void Save(string server, string licenseServer, string companyDb, string dbServerType,

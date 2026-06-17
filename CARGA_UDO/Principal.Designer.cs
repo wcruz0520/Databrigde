@@ -58,17 +58,16 @@ namespace CARGA_UDO
             this.btnConectar.FlatAppearance.BorderSize = 0;
             this.btnConectar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConectar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnConectar.IconChar = FontAwesome.Sharp.IconChar.PlugCircleXmark;
-            this.btnConectar.IconColor = System.Drawing.Color.Red;
+            this.btnConectar.IconChar = FontAwesome.Sharp.IconChar.PlugCircleCheck;
+            this.btnConectar.IconColor = System.Drawing.Color.Green;
             this.btnConectar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnConectar.IconSize = 32;
             this.btnConectar.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnConectar.Location = new System.Drawing.Point(719, 8);
+            this.btnConectar.Location = new System.Drawing.Point(842, 0);
             this.btnConectar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnConectar.Name = "btnConectar";
-            this.btnConectar.Size = new System.Drawing.Size(148, 35);
+            this.btnConectar.Size = new System.Drawing.Size(46, 32);
             this.btnConectar.TabIndex = 0;
-            this.btnConectar.Text = "Conectar";
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnConectar.UseVisualStyleBackColor = false;
             this.btnConectar.Click += new System.EventHandler(this.btnConectar_Click);
@@ -261,18 +260,18 @@ namespace CARGA_UDO
             this.MIConfig});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(900, 36);
+            this.menuStrip1.Size = new System.Drawing.Size(900, 32);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // MIConfig
             // 
-            this.MIConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MIConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MIConfig.IconChar = FontAwesome.Sharp.IconChar.Server;
             this.MIConfig.IconColor = System.Drawing.Color.Black;
             this.MIConfig.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.MIConfig.Name = "MIConfig";
-            this.MIConfig.Size = new System.Drawing.Size(135, 32);
+            this.MIConfig.Size = new System.Drawing.Size(147, 28);
             this.MIConfig.Text = "Configuración";
             this.MIConfig.Click += new System.EventHandler(this.MIConfig_Click);
             // 
