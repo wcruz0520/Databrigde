@@ -39,6 +39,7 @@ namespace CARGA_UDO
         private void Principal_Load(object sender, EventArgs e)
         {
             strTest = Environment.GetCommandLineArgs();
+            CargarConexionesGuardadas();
             ActualizarEstadoConexion(false);
 
             if (SapConnectionConfig.IsConfigured())
@@ -106,8 +107,17 @@ namespace CARGA_UDO
                     return false;
                 }
 
+                SapConnectionProfile activeProfile = SapConnectionConfig.GetActiveProfile();
+                if (activeProfile == null || !activeProfile.IsConfigured())
+                {
+                    MessageBox.Show("Seleccione una conexión SAP configurada antes de conectar.",
+                                    "Configuración requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    ActualizarEstadoConexion(false);
+                    return false;
+                }
+
                 Globals.rCompany = new SAPbobsCOM.Company();
-                SapConnectionConfig.ApplyToCompany(Globals.rCompany);
+                SapConnectionConfig.ApplyToCompany(Globals.rCompany, activeProfile);
 
                 ret = Globals.rCompany.Connect();
                 if (ret != 0)
@@ -145,6 +155,7 @@ namespace CARGA_UDO
                 this.btnProccess.Enabled = true;
                 //this.txtBoxBD.Text = $"Compania: {Globals.rCompany.CompanyDB}";
                 //this.txtBoxUser.Text = $"Usuario: {Globals.rCompany.UserName}";
+                this.cmbConexiones.Enabled = false;
                 //this.txtBoxBD.Enabled = false;
                 //this.txtBoxUser.Enabled = false;
                 return;
@@ -156,8 +167,32 @@ namespace CARGA_UDO
             this.btnConectar.IconColor = Color.Green;
             this.btnConectar.IconChar = IconChar.PlugCircleCheck;
             this.btnProccess.Enabled = false;
+            this.cmbConexiones.Enabled = true;
             //this.txtBoxBD.Text = $"Compania: ";
             //this.txtBoxUser.Text = $"Usuario: ";
+        }
+
+        private void CargarConexionesGuardadas()
+        {
+            List<SapConnectionProfile> profiles = SapConnectionConfig.GetProfiles();
+            SapConnectionProfile activeProfile = SapConnectionConfig.GetActiveProfile();
+
+            cmbConexiones.DataSource = null;
+            cmbConexiones.DataSource = profiles;
+            cmbConexiones.DisplayMember = "DisplayName";
+            cmbConexiones.ValueMember = "Id";
+
+            if (activeProfile != null)
+                cmbConexiones.SelectedValue = activeProfile.Id;
+        }
+
+        private void cmbConexiones_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (Globals.rCompany != null && Globals.rCompany.Connected)
+                return;
+
+            if (cmbConexiones.SelectedItem is SapConnectionProfile profile)
+                SapConnectionConfig.SetActiveProfile(profile.Id);
         }
 
         private void btnConectar_Click(object sender, EventArgs e)
@@ -1371,12 +1406,21 @@ namespace CARGA_UDO
 
         private void MIConfig_Click(object sender, EventArgs e)
         {
+            bool conectado = Globals.rCompany != null && Globals.rCompany.Connected;
+            if (conectado)
+            {
+                MessageBox.Show("Solo puede agregar, modificar o cambiar conexiones cuando esté desconectado.",
+                                "Conexión activa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             using (var form = new ConfigForm())
             {
-                if (form.ShowDialog(this) == DialogResult.OK &&
-                    (Globals.rCompany == null || !Globals.rCompany.Connected))
+                if (form.ShowDialog(this) == DialogResult.OK)
                 {
-                    ConectarSAP();
+                    CargarConexionesGuardadas();
+                    if (SapConnectionConfig.IsConfigured())
+                        ConectarSAP();
                 }
             }
         }
