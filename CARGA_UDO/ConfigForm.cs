@@ -11,6 +11,8 @@ namespace CARGA_UDO
         private string activeProfileId;
         private bool loadingProfile;
 
+        public bool ConnectionsChanged { get; private set; }
+
         public ConfigForm()
         {
             InitializeComponent();
@@ -49,6 +51,7 @@ namespace CARGA_UDO
 
             SapConnectionProfile selected = GetSelectedProfile();
             SapConnectionConfig.SaveProfiles(profiles, selected?.Id);
+            ConnectionsChanged = true;
             MessageBox.Show("Conexiones guardadas correctamente.", "Configuración", MessageBoxButtons.OK, MessageBoxIcon.Information);
             //DialogResult = DialogResult.OK;
             //Close();

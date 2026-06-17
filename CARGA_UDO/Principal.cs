@@ -1416,7 +1416,8 @@ namespace CARGA_UDO
 
             using (var form = new ConfigForm())
             {
-                if (form.ShowDialog(this) == DialogResult.OK)
+                DialogResult result = form.ShowDialog(this);
+                if (result == DialogResult.OK || form.ConnectionsChanged)
                 {
                     CargarConexionesGuardadas();
                     //if (SapConnectionConfig.IsConfigured())
