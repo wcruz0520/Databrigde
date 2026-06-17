@@ -50,8 +50,8 @@ namespace CARGA_UDO
             SapConnectionProfile selected = GetSelectedProfile();
             SapConnectionConfig.SaveProfiles(profiles, selected?.Id);
             MessageBox.Show("Conexiones guardadas correctamente.", "Configuración", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            DialogResult = DialogResult.OK;
-            Close();
+            //DialogResult = DialogResult.OK;
+            //Close();
         }
 
         private void btnCancelar_Click(object sender, EventArgs e)

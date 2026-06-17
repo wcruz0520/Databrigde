@@ -45,41 +45,18 @@ namespace CARGA_UDO
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.MIConfig = new FontAwesome.Sharp.IconMenuItem();
-            this.lblConexion = new System.Windows.Forms.Label();
             this.cmbConexiones = new System.Windows.Forms.ComboBox();
+            this.lblConexion = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
             this.grpModoCarga.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
-            //
-            // lblConexion
-            //
-            this.lblConexion.AutoSize = true;
-            this.lblConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblConexion.Location = new System.Drawing.Point(285, 8);
-            this.lblConexion.Name = "lblConexion";
-            this.lblConexion.Size = new System.Drawing.Size(68, 17);
-            this.lblConexion.TabIndex = 12;
-            this.lblConexion.Text = "Conexión";
-            //
-            // cmbConexiones
-            //
-            this.cmbConexiones.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cmbConexiones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbConexiones.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cmbConexiones.FormattingEnabled = true;
-            this.cmbConexiones.Location = new System.Drawing.Point(359, 3);
-            this.cmbConexiones.Name = "cmbConexiones";
-            this.cmbConexiones.Size = new System.Drawing.Size(477, 25);
-            this.cmbConexiones.TabIndex = 13;
-            this.cmbConexiones.SelectedIndexChanged += new System.EventHandler(this.cmbConexiones_SelectedIndexChanged);
-            //
+            // 
             // btnConectar
-            //
+            // 
             this.btnConectar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnConectar.BackColor = System.Drawing.Color.Gainsboro;
+            this.btnConectar.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.btnConectar.FlatAppearance.BorderSize = 0;
             this.btnConectar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnConectar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -96,9 +73,9 @@ namespace CARGA_UDO
             this.btnConectar.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnConectar.UseVisualStyleBackColor = false;
             this.btnConectar.Click += new System.EventHandler(this.btnConectar_Click);
-            //
+            // 
             // btnProccess
-            //
+            // 
             this.btnProccess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnProccess.BackColor = System.Drawing.Color.Gainsboro;
             this.btnProccess.FlatAppearance.BorderSize = 0;
@@ -118,9 +95,9 @@ namespace CARGA_UDO
             this.btnProccess.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnProccess.UseVisualStyleBackColor = false;
             this.btnProccess.Click += new System.EventHandler(this.btnProccess_Click);
-            //
+            // 
             // btnDetener
-            //
+            // 
             this.btnDetener.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnDetener.BackColor = System.Drawing.Color.Gainsboro;
             this.btnDetener.Enabled = false;
@@ -141,11 +118,11 @@ namespace CARGA_UDO
             this.btnDetener.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnDetener.UseVisualStyleBackColor = false;
             this.btnDetener.Click += new System.EventHandler(this.btnDetener_Click);
-            //
+            // 
             // dtgRegistros
-            //
-            this.dtgRegistros.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            // 
+            this.dtgRegistros.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dtgRegistros.BackgroundColor = System.Drawing.Color.White;
             this.dtgRegistros.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -157,9 +134,9 @@ namespace CARGA_UDO
             this.dtgRegistros.RowTemplate.Height = 24;
             this.dtgRegistros.Size = new System.Drawing.Size(835, 355);
             this.dtgRegistros.TabIndex = 2;
-            //
+            // 
             // btnCargar
-            //
+            // 
             this.btnCargar.Location = new System.Drawing.Point(33, 60);
             this.btnCargar.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnCargar.Name = "btnCargar";
@@ -168,9 +145,9 @@ namespace CARGA_UDO
             this.btnCargar.Text = "📁";
             this.btnCargar.UseVisualStyleBackColor = true;
             this.btnCargar.Click += new System.EventHandler(this.btnCargar_Click);
-            //
+            // 
             // txtTableName
-            //
+            // 
             this.txtTableName.BackColor = System.Drawing.Color.White;
             this.txtTableName.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txtTableName.Enabled = false;
@@ -180,9 +157,9 @@ namespace CARGA_UDO
             this.txtTableName.Name = "txtTableName";
             this.txtTableName.Size = new System.Drawing.Size(248, 19);
             this.txtTableName.TabIndex = 4;
-            //
+            // 
             // cmbTipoObj
-            //
+            // 
             this.cmbTipoObj.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoObj.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cmbTipoObj.FormattingEnabled = true;
@@ -191,9 +168,9 @@ namespace CARGA_UDO
             this.cmbTipoObj.Name = "cmbTipoObj";
             this.cmbTipoObj.Size = new System.Drawing.Size(146, 33);
             this.cmbTipoObj.TabIndex = 5;
-            //
+            // 
             // grpModoCarga
-            //
+            // 
             this.grpModoCarga.Controls.Add(this.rdbAgregarActualizar);
             this.grpModoCarga.Controls.Add(this.rdbSoloActualizar);
             this.grpModoCarga.Controls.Add(this.rdbSoloAgregar);
@@ -206,9 +183,9 @@ namespace CARGA_UDO
             this.grpModoCarga.TabIndex = 9;
             this.grpModoCarga.TabStop = false;
             this.grpModoCarga.Text = "Modo de carga";
-            //
+            // 
             // rdbAgregarActualizar
-            //
+            // 
             this.rdbAgregarActualizar.AutoSize = true;
             this.rdbAgregarActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbAgregarActualizar.Location = new System.Drawing.Point(228, 22);
@@ -219,9 +196,9 @@ namespace CARGA_UDO
             this.rdbAgregarActualizar.TabStop = true;
             this.rdbAgregarActualizar.Text = "Ambos";
             this.rdbAgregarActualizar.UseVisualStyleBackColor = true;
-            //
+            // 
             // rdbSoloActualizar
-            //
+            // 
             this.rdbSoloActualizar.AutoSize = true;
             this.rdbSoloActualizar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbSoloActualizar.Location = new System.Drawing.Point(112, 22);
@@ -232,9 +209,9 @@ namespace CARGA_UDO
             this.rdbSoloActualizar.TabStop = true;
             this.rdbSoloActualizar.Text = "Actualizar";
             this.rdbSoloActualizar.UseVisualStyleBackColor = true;
-            //
+            // 
             // rdbSoloAgregar
-            //
+            // 
             this.rdbSoloAgregar.AutoSize = true;
             this.rdbSoloAgregar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.rdbSoloAgregar.Location = new System.Drawing.Point(9, 22);
@@ -245,9 +222,9 @@ namespace CARGA_UDO
             this.rdbSoloAgregar.TabStop = true;
             this.rdbSoloAgregar.Text = "Agregar";
             this.rdbSoloAgregar.UseVisualStyleBackColor = true;
-            //
+            // 
             // prgCarga
-            //
+            // 
             this.prgCarga.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.prgCarga.Location = new System.Drawing.Point(390, 506);
             this.prgCarga.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
@@ -255,17 +232,17 @@ namespace CARGA_UDO
             this.prgCarga.Size = new System.Drawing.Size(478, 35);
             this.prgCarga.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.prgCarga.TabIndex = 6;
-            //
+            // 
             // lblEstado
-            //
+            // 
             this.lblEstado.AutoSize = true;
             this.lblEstado.Location = new System.Drawing.Point(390, 474);
             this.lblEstado.Name = "lblEstado";
             this.lblEstado.Size = new System.Drawing.Size(0, 20);
             this.lblEstado.TabIndex = 7;
-            //
+            // 
             // groupBox1
-            //
+            // 
             this.groupBox1.Controls.Add(this.txtTableName);
             this.groupBox1.Controls.Add(this.cmbTipoObj);
             this.groupBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -275,9 +252,9 @@ namespace CARGA_UDO
             this.groupBox1.TabIndex = 10;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Tabla principal";
-            //
+            // 
             // menuStrip1
-            //
+            // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2, 2, 0, 2);
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -288,9 +265,9 @@ namespace CARGA_UDO
             this.menuStrip1.Size = new System.Drawing.Size(900, 32);
             this.menuStrip1.TabIndex = 11;
             this.menuStrip1.Text = "menuStrip1";
-            //
+            // 
             // MIConfig
-            //
+            // 
             this.MIConfig.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MIConfig.IconChar = FontAwesome.Sharp.IconChar.Server;
             this.MIConfig.IconColor = System.Drawing.Color.Black;
@@ -299,9 +276,33 @@ namespace CARGA_UDO
             this.MIConfig.Size = new System.Drawing.Size(147, 28);
             this.MIConfig.Text = "Configuración";
             this.MIConfig.Click += new System.EventHandler(this.MIConfig_Click);
-            //
+            // 
+            // cmbConexiones
+            // 
+            this.cmbConexiones.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cmbConexiones.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cmbConexiones.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmbConexiones.FormattingEnabled = true;
+            this.cmbConexiones.Location = new System.Drawing.Point(600, 8);
+            this.cmbConexiones.Name = "cmbConexiones";
+            this.cmbConexiones.Size = new System.Drawing.Size(236, 25);
+            this.cmbConexiones.TabIndex = 13;
+            this.cmbConexiones.SelectedIndexChanged += new System.EventHandler(this.cmbConexiones_SelectedIndexChanged);
+            // 
+            // lblConexion
+            // 
+            this.lblConexion.AutoSize = true;
+            this.lblConexion.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.lblConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblConexion.Location = new System.Drawing.Point(443, 8);
+            this.lblConexion.Name = "lblConexion";
+            this.lblConexion.Size = new System.Drawing.Size(151, 17);
+            this.lblConexion.TabIndex = 12;
+            this.lblConexion.Text = "Seleccionar compañía:";
+            // 
             // Principal
-            //
+            // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
@@ -353,8 +354,8 @@ namespace CARGA_UDO
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private FontAwesome.Sharp.IconMenuItem MIConfig;
-        private System.Windows.Forms.Label lblConexion;
         private System.Windows.Forms.ComboBox cmbConexiones;
+        private System.Windows.Forms.Label lblConexion;
     }
 }
 

@@ -42,10 +42,10 @@ namespace CARGA_UDO
             CargarConexionesGuardadas();
             ActualizarEstadoConexion(false);
 
-            if (SapConnectionConfig.IsConfigured())
-            {
-                ConectarSAP();
-            }
+            //if (SapConnectionConfig.IsConfigured())
+            //{
+            //    ConectarSAP();
+            //}
 
             cmbTipoObj.Items.Clear();
 
@@ -1419,8 +1419,8 @@ namespace CARGA_UDO
                 if (form.ShowDialog(this) == DialogResult.OK)
                 {
                     CargarConexionesGuardadas();
-                    if (SapConnectionConfig.IsConfigured())
-                        ConectarSAP();
+                    //if (SapConnectionConfig.IsConfigured())
+                    //    ConectarSAP();
                 }
             }
         }
