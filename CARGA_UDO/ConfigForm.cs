@@ -110,6 +110,9 @@ namespace CARGA_UDO
 
             selected.Name = txtNombreConexion.Text.Trim();
             selected.Server = txtServidor.Text.Trim();
+            selected.Version = Convert.ToInt32(nudVersionSAP.Value);
+            selected.UseTrusted = chckUseTrusted.Checked;
+            selected.SLDServer = txtServidorSLD.Text.Trim();
             selected.LicenseServer = txtServidorLicencia.Text.Trim();
             selected.CompanyDb = txtBaseCompania.Text.Trim();
             selected.DbServerType = GetSelectedServerType();
@@ -139,6 +142,9 @@ namespace CARGA_UDO
             loadingProfile = true;
             txtNombreConexion.Text = profile?.Name ?? string.Empty;
             txtServidor.Text = profile?.Server ?? string.Empty;
+            nudVersionSAP.Value = profile.Version;
+            chckUseTrusted.Checked = profile.UseTrusted;
+            txtServidorSLD.Text = profile?.SLDServer ?? string.Empty;
             txtServidorLicencia.Text = profile?.LicenseServer ?? string.Empty;
             txtBaseCompania.Text = profile?.CompanyDb ?? string.Empty;
             txtUsuarioBD.Text = profile?.DbUser ?? string.Empty;
@@ -158,7 +164,7 @@ namespace CARGA_UDO
         {
             if (string.IsNullOrWhiteSpace(txtNombreConexion.Text) ||
                 string.IsNullOrWhiteSpace(txtServidor.Text) ||
-                string.IsNullOrWhiteSpace(txtServidorLicencia.Text) ||
+                //string.IsNullOrWhiteSpace(txtServidorLicencia.Text) ||
                 string.IsNullOrWhiteSpace(txtBaseCompania.Text) ||
                 cmbTipoServidor.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(txtUsuarioBD.Text) ||

@@ -9,8 +9,11 @@ namespace CARGA_UDO
     {
         public string Id { get; set; }
         public string Name { get; set; }
+        public int Version { get; set; }
         public string Server { get; set; }
         public string LicenseServer { get; set; }
+        public bool UseTrusted { get; set; }
+        public string SLDServer { get; set; }
         public string CompanyDb { get; set; }
         public string DbServerType { get; set; }
         public string DbUser { get; set; }
@@ -23,7 +26,10 @@ namespace CARGA_UDO
         public bool IsConfigured()
         {
             return !string.IsNullOrWhiteSpace(Server)
+                && !string.IsNullOrWhiteSpace(Version.ToString())
                 && !string.IsNullOrWhiteSpace(LicenseServer)
+                && !string.IsNullOrWhiteSpace(UseTrusted.ToString())
+                && !string.IsNullOrWhiteSpace(SLDServer)
                 && !string.IsNullOrWhiteSpace(CompanyDb)
                 && !string.IsNullOrWhiteSpace(DbServerType)
                 && !string.IsNullOrWhiteSpace(DbUser)
@@ -39,7 +45,10 @@ namespace CARGA_UDO
     public static class SapConnectionConfig
     {
         public const string ServerKey = "SapServer";
+        public const string Version = "Version";
         public const string LicenseServerKey = "SapLicenseServer";
+        public const string UseTrusted = "UseTrusted";
+        public const string SLDServer = "SLDServer";
         public const string CompanyDbKey = "SapCompanyDb";
         public const string DbServerTypeKey = "SapDbServerType";
         public const string DbUserKey = "SapDbUser";
@@ -117,15 +126,15 @@ namespace CARGA_UDO
                 return;
 
             company.Server = profile.Server;
-            company.LicenseServer = profile.LicenseServer;
+            //company.LicenseServer = profile.LicenseServer;
             company.CompanyDB = profile.CompanyDb;
             company.DbServerType = GetDbServerType(profile);
             company.UserName = profile.SapUser;
             company.Password = profile.SapPassword;
-            company.DbUserName = profile.DbUser;
-            company.DbPassword = profile.DbPassword;
-            company.UseTrusted = true;
-            company.SLDServer = profile.LicenseServer;
+            //company.DbUserName = profile.DbUser;
+            //company.DbPassword = profile.DbPassword;
+            company.UseTrusted = false;
+            //company.SLDServer = profile.LicenseServer;
         }
 
         public static void SaveProfiles(IEnumerable<SapConnectionProfile> profiles, string activeId)
@@ -146,7 +155,7 @@ namespace CARGA_UDO
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        public static void Save(string server, string licenseServer, string companyDb, string dbServerType,
+        public static void Save(string server, int version, string licenseServer, bool usetrusted, string sldserver, string companyDb, string dbServerType,
             string dbUser, string dbPassword, string sapUser, string sapPassword)
         {
             SapConnectionProfile active = GetActiveProfile() ?? CreateNewProfile("Conexión SAP");
@@ -158,6 +167,9 @@ namespace CARGA_UDO
             active.DbPassword = dbPassword;
             active.SapUser = sapUser;
             active.SapPassword = sapPassword;
+            active.Version = version;
+            active.UseTrusted = usetrusted;
+            active.SLDServer = sldserver;
             List<SapConnectionProfile> profiles = GetProfiles();
             int index = profiles.FindIndex(profile => profile.Id == active.Id);
             if (index >= 0)
@@ -190,7 +202,10 @@ namespace CARGA_UDO
                 Id = id,
                 Name = GetValue(ProfileKey(id, "Name")),
                 Server = GetValue(ProfileKey(id, ServerKey)),
+                Version = Convert.ToInt32(GetValue(ProfileKey(id, Version))),
                 LicenseServer = GetValue(ProfileKey(id, LicenseServerKey)),
+                UseTrusted = Convert.ToBoolean(GetValue(ProfileKey(id, UseTrusted))),
+                SLDServer = GetValue(ProfileKey(id, SLDServer)),
                 CompanyDb = GetValue(ProfileKey(id, CompanyDbKey)),
                 DbServerType = GetValue(ProfileKey(id, DbServerTypeKey)),
                 DbUser = GetValue(ProfileKey(id, DbUserKey)),
@@ -204,7 +219,10 @@ namespace CARGA_UDO
         {
             Set(config, ProfileKey(profile.Id, "Name"), profile.Name);
             Set(config, ProfileKey(profile.Id, ServerKey), profile.Server);
+            Set(config, ProfileKey(profile.Id, Version), profile.Version.ToString());
             Set(config, ProfileKey(profile.Id, LicenseServerKey), profile.LicenseServer);
+            Set(config, ProfileKey(profile.Id, UseTrusted), profile.UseTrusted.ToString());
+            Set(config, ProfileKey(profile.Id, SLDServer), profile.SLDServer);
             Set(config, ProfileKey(profile.Id, CompanyDbKey), profile.CompanyDb);
             Set(config, ProfileKey(profile.Id, DbServerTypeKey), profile.DbServerType);
             Set(config, ProfileKey(profile.Id, DbUserKey), profile.DbUser);
@@ -237,6 +255,9 @@ namespace CARGA_UDO
                 Id = Guid.NewGuid().ToString("N"),
                 Name = "Conexión SAP",
                 Server = GetValue(ServerKey),
+                Version = Convert.ToInt32(GetValue(Version.ToString())),
+                UseTrusted = Convert.ToBoolean(GetValue(UseTrusted.ToString())),
+                SLDServer = GetValue(SLDServer),
                 LicenseServer = GetValue(LicenseServerKey),
                 CompanyDb = GetValue(CompanyDbKey),
                 DbServerType = GetValue(DbServerTypeKey),
