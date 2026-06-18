@@ -497,6 +497,12 @@ namespace CARGA_UDO
                 string tipoObj = IdentificarTipoTablaSeleccionada(objeto); // Tipo de tabla según OUTB
                 string modoCarga = ObtenerModoCargaSeleccionado(); // "I", "U", "A"
 
+                if (EsTipoLinea(tipoObj))
+                {
+                    ProcesarExcelSoloLineas(tabs, objeto, tipoObj, modoCarga, ref transaccionIniciada);
+                    return;
+                }
+
                 var gridCabecera = tabs.TabPages[0].Controls.OfType<DataGridView>().First();
 
                 // Lee registros según el tipo (Code o DocEntry)
@@ -650,6 +656,145 @@ namespace CARGA_UDO
         }
 
 
+
+
+        private bool EsTipoLinea(string tipoObj)
+        {
+            return string.Equals(tipoObj, "ML", StringComparison.OrdinalIgnoreCase) ||
+                   string.Equals(tipoObj, "DL", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private void ProcesarExcelSoloLineas(TabControl tabs, string primeraTablaHija, string tipoLinea, string modoCarga, ref bool transaccionIniciada)
+        {
+            var contexto = ObtenerContextoTablaHija(primeraTablaHija, tipoLinea);
+            if (contexto == null)
+                throw new Exception($"No fue posible encontrar el UDO padre para la tabla de líneas [{primeraTablaHija}].");
+
+            string tipoPadre = contexto.TipoPadre;
+            SeleccionarTipoObjeto(tipoLinea);
+
+            var gruposPorCabecera = new Dictionary<string, List<(string tablaHija, List<RegistroTabla> registros)>>();
+            int totalLineas = 0;
+
+            foreach (TabPage page in tabs.TabPages)
+            {
+                string tablaHija = page.Text;
+                string tipoHoja = ObtenerTipoTablaDesdeOUTB(tablaHija);
+                if (!EsTipoLinea(tipoHoja))
+                    throw new Exception($"La hoja [{tablaHija}] no corresponde a una tabla de líneas.");
+
+                var contextoHoja = ObtenerContextoTablaHija(tablaHija, tipoHoja);
+                if (contextoHoja == null ||
+                    !string.Equals(contextoHoja.UdoCode, contexto.UdoCode, StringComparison.OrdinalIgnoreCase) ||
+                    !string.Equals(contextoHoja.TipoPadre, tipoPadre, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new Exception($"La hoja [{tablaHija}] no pertenece al mismo UDO padre que [{primeraTablaHija}].");
+                }
+
+                var gridHijo = page.Controls.OfType<DataGridView>().First();
+                var registrosHijos = LeerRegistrosDesdeGrid(gridHijo, tipoPadre);
+                totalLineas += registrosHijos.Count;
+
+                foreach (var grupo in registrosHijos.GroupBy(x => x.KeyValue))
+                {
+                    if (string.IsNullOrWhiteSpace(grupo.Key))
+                        throw new Exception($"La hoja [{tablaHija}] contiene líneas sin llave de cabecera ({(tipoPadre == "D" ? "DocEntry" : "Code")}).");
+
+                    if (!gruposPorCabecera.ContainsKey(grupo.Key))
+                        gruposPorCabecera[grupo.Key] = new List<(string tablaHija, List<RegistroTabla> registros)>();
+
+                    gruposPorCabecera[grupo.Key].Add((tablaHija, grupo.ToList()));
+                }
+            }
+
+            if (totalLineas == 0)
+            {
+                lblEstado.Text = "No hay líneas para procesar";
+                return;
+            }
+
+            transaccionIniciada = IniciarTransaccionSAP();
+            int procesados = 0;
+            int total = gruposPorCabecera.Count;
+
+            foreach (var grupoCabecera in gruposPorCabecera)
+            {
+                if (cancelarProceso)
+                    throw new OperationCanceledException("Proceso detenido por el usuario.");
+
+                msg_error = string.Empty;
+                var cabecera = new RegistroTabla { KeyValue = grupoCabecera.Key };
+
+                if (tipoPadre == "M")
+                {
+                    bool actualizado = ExisteRegistro_Maestro(contexto.UdoCode, cabecera.KeyValue);
+                    if (DebeProcesarRegistro(modoCarga, actualizado, cabecera.KeyValue))
+                    {
+                        Guardar_Maestro(contexto.UdoCode, cabecera, grupoCabecera.Value);
+                        logCarga.Add(new ResultadoCarga
+                        {
+                            Code = cabecera.KeyValue,
+                            Exitoso = resultproceso,
+                            Descripcion = resultproceso ? (actualizado ? "Líneas actualizadas exitosamente" : "Registro creado con líneas exitosamente") : msg_error
+                        });
+                    }
+                }
+                else
+                {
+                    bool actualizado = ExisteRegistro_Documento(contexto.UdoCode, cabecera.KeyValue);
+                    if (DebeProcesarRegistro(modoCarga, actualizado, cabecera.KeyValue))
+                    {
+                        Guardar_Documento(contexto.UdoCode, cabecera, grupoCabecera.Value);
+                        logCarga.Add(new ResultadoCarga
+                        {
+                            Code = cabecera.KeyValue,
+                            Exitoso = resultproceso,
+                            Descripcion = resultproceso ? (actualizado ? "Líneas actualizadas exitosamente" : "Documento creado con líneas exitosamente") : msg_error
+                        });
+                    }
+                }
+
+                procesados++;
+                prgCarga.Value = (int)((procesados / (double)total) * 100);
+                lblEstado.Text = $"Procesando cabecera {procesados} de {total} desde líneas...";
+                Application.DoEvents();
+            }
+
+            FinalizarTransaccionSAP(true);
+            transaccionIniciada = false;
+            lblEstado.Text = "Carga de líneas finalizada. Se aplicó commit.";
+            MostrarPantallaLog();
+        }
+
+        private ContextoTablaHija ObtenerContextoTablaHija(string tablaHija, string tipoLinea)
+        {
+            if (string.IsNullOrWhiteSpace(tablaHija) || Globals.rCompany == null || !Globals.rCompany.Connected)
+                return null;
+
+            var rs = (SAPbobsCOM.Recordset)Globals.rCompany
+                .GetBusinessObject(SAPbobsCOM.BoObjectTypes.BoRecordset);
+
+            bool esHana = Globals.rCompany.DbServerType == SAPbobsCOM.BoDataServerTypes.dst_HANADB;
+            string tabla = tablaHija.Trim().TrimStart('@').Replace("'", "''");
+            string sql = esHana
+                ? $"SELECT T0.\"Code\", T0.\"TableName\" FROM \"OUDO\" T0 INNER JOIN \"UDO1\" T1 ON T0.\"Code\" = T1.\"Code\" WHERE UPPER(T1.\"TableName\") = UPPER('{tabla}')"
+                : $"SELECT T0.[Code], T0.[TableName] FROM [OUDO] T0 INNER JOIN [UDO1] T1 ON T0.[Code] = T1.[Code] WHERE UPPER(T1.[TableName]) = UPPER('{tabla}')";
+
+            rs.DoQuery(sql);
+            if (rs.EoF)
+                return null;
+
+            string udoCode = rs.Fields.Item("Code").Value?.ToString();
+            string tablaPadre = rs.Fields.Item("TableName").Value?.ToString();
+            string tipoPadre = string.Equals(tipoLinea, "DL", StringComparison.OrdinalIgnoreCase) ? "D" : "M";
+
+            return new ContextoTablaHija
+            {
+                UdoCode = udoCode,
+                TablaPadre = tablaPadre,
+                TipoPadre = tipoPadre
+            };
+        }
 
         private bool ExisteTablaEnBaseDatos(string tabla)
         {
@@ -1431,6 +1576,13 @@ namespace CARGA_UDO
             }
         }
 
+    }
+
+    internal class ContextoTablaHija
+    {
+        public string UdoCode { get; set; }
+        public string TablaPadre { get; set; }
+        public string TipoPadre { get; set; }
     }
 
     public class RegistroTabla
