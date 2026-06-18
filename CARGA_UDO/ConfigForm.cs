@@ -142,8 +142,8 @@ namespace CARGA_UDO
             loadingProfile = true;
             txtNombreConexion.Text = profile?.Name ?? string.Empty;
             txtServidor.Text = profile?.Server ?? string.Empty;
-            nudVersionSAP.Value = profile.Version;
-            chckUseTrusted.Checked = profile.UseTrusted;
+            nudVersionSAP.Value = profile?.Version > 0 ? profile.Version : 10;
+            chckUseTrusted.Checked = profile?.UseTrusted == true;
             txtServidorSLD.Text = profile?.SLDServer ?? string.Empty;
             txtServidorLicencia.Text = profile?.LicenseServer ?? string.Empty;
             txtBaseCompania.Text = profile?.CompanyDb ?? string.Empty;
@@ -164,13 +164,28 @@ namespace CARGA_UDO
         {
             if (string.IsNullOrWhiteSpace(txtNombreConexion.Text) ||
                 string.IsNullOrWhiteSpace(txtServidor.Text) ||
-                //string.IsNullOrWhiteSpace(txtServidorLicencia.Text) ||
                 string.IsNullOrWhiteSpace(txtBaseCompania.Text) ||
                 cmbTipoServidor.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(txtUsuarioBD.Text) ||
                 string.IsNullOrWhiteSpace(txtUsuarioSAP.Text))
             {
-                MessageBox.Show("Complete nombre, servidor, servidor de licencias, compañía, tipo de base de datos, usuario BD y usuario SAP.",
+                MessageBox.Show("Complete nombre, servidor, compañía, tipo de base de datos y usuario SAP.",
+                    "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (nudVersionSAP.Value < 10)
+            {
+                if (string.IsNullOrWhiteSpace(txtServidorLicencia.Text) ||
+                    (!chckUseTrusted.Checked && string.IsNullOrWhiteSpace(txtUsuarioBD.Text)))
+                {
+                    MessageBox.Show("Para SAP menor a versión 10 complete servidor de licencias y, si no usa trusted, usuario BD.",
+                        "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+            }
+            else if (string.IsNullOrWhiteSpace(txtServidorSLD.Text))
+            {
+                MessageBox.Show("Para SAP versión 10 o superior complete el servidor SLD.",
                     "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }

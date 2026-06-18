@@ -25,15 +25,22 @@ namespace CARGA_UDO
 
         public bool IsConfigured()
         {
-            return !string.IsNullOrWhiteSpace(Server)
-                && !string.IsNullOrWhiteSpace(Version.ToString())
-                && !string.IsNullOrWhiteSpace(LicenseServer)
-                && !string.IsNullOrWhiteSpace(UseTrusted.ToString())
-                && !string.IsNullOrWhiteSpace(SLDServer)
-                && !string.IsNullOrWhiteSpace(CompanyDb)
-                && !string.IsNullOrWhiteSpace(DbServerType)
-                && !string.IsNullOrWhiteSpace(DbUser)
-                && !string.IsNullOrWhiteSpace(SapUser);
+            if (Version <= 0
+                || string.IsNullOrWhiteSpace(Server)
+                || string.IsNullOrWhiteSpace(CompanyDb)
+                || string.IsNullOrWhiteSpace(DbServerType)
+                || string.IsNullOrWhiteSpace(SapUser))
+            {
+                return false;
+            }
+
+            if (Version < 10)
+            {
+                return !string.IsNullOrWhiteSpace(LicenseServer)
+                    && (UseTrusted || !string.IsNullOrWhiteSpace(DbUser));
+            }
+
+            return !string.IsNullOrWhiteSpace(SLDServer);
         }
 
         public override string ToString()
@@ -125,16 +132,27 @@ namespace CARGA_UDO
             if (profile == null)
                 return;
 
-            company.Server = profile.Server;
-            //company.LicenseServer = profile.LicenseServer;
-            company.CompanyDB = profile.CompanyDb;
             company.DbServerType = GetDbServerType(profile);
+            company.UseTrusted = profile.UseTrusted;
+            company.CompanyDB = profile.CompanyDb;
             company.UserName = profile.SapUser;
             company.Password = profile.SapPassword;
-            //company.DbUserName = profile.DbUser;
-            //company.DbPassword = profile.DbPassword;
-            company.UseTrusted = false;
-            //company.SLDServer = profile.LicenseServer;
+            company.Server = profile.Server;
+
+            if (profile.Version < 10)
+            {
+                company.LicenseServer = profile.LicenseServer;
+
+                if (!profile.UseTrusted)
+                {
+                    company.DbUserName = profile.DbUser;
+                    company.DbPassword = profile.DbPassword;
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(profile.SLDServer))
+            {
+                company.SLDServer = profile.SLDServer;
+            }
         }
 
         public static void SaveProfiles(IEnumerable<SapConnectionProfile> profiles, string activeId)
@@ -202,9 +220,9 @@ namespace CARGA_UDO
                 Id = id,
                 Name = GetValue(ProfileKey(id, "Name")),
                 Server = GetValue(ProfileKey(id, ServerKey)),
-                Version = Convert.ToInt32(GetValue(ProfileKey(id, Version))),
+                Version = GetIntValue(ProfileKey(id, Version), 9),
                 LicenseServer = GetValue(ProfileKey(id, LicenseServerKey)),
-                UseTrusted = Convert.ToBoolean(GetValue(ProfileKey(id, UseTrusted))),
+                UseTrusted = GetBoolValue(ProfileKey(id, UseTrusted)),
                 SLDServer = GetValue(ProfileKey(id, SLDServer)),
                 CompanyDb = GetValue(ProfileKey(id, CompanyDbKey)),
                 DbServerType = GetValue(ProfileKey(id, DbServerTypeKey)),
@@ -233,7 +251,7 @@ namespace CARGA_UDO
 
         private static void RemoveProfileSettings(Configuration config, string id)
         {
-            foreach (string key in new[] { "Name", ServerKey, LicenseServerKey, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey })
+            foreach (string key in new[] { "Name", ServerKey, Version, LicenseServerKey, UseTrusted, SLDServer, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey })
                 config.AppSettings.Settings.Remove(ProfileKey(id, key));
         }
 
@@ -255,8 +273,8 @@ namespace CARGA_UDO
                 Id = Guid.NewGuid().ToString("N"),
                 Name = "Conexión SAP",
                 Server = GetValue(ServerKey),
-                Version = Convert.ToInt32(GetValue(Version.ToString())),
-                UseTrusted = Convert.ToBoolean(GetValue(UseTrusted.ToString())),
+                Version = GetIntValue(Version, 9),
+                UseTrusted = GetBoolValue(UseTrusted),
                 SLDServer = GetValue(SLDServer),
                 LicenseServer = GetValue(LicenseServerKey),
                 CompanyDb = GetValue(CompanyDbKey),
@@ -266,6 +284,16 @@ namespace CARGA_UDO
                 SapUser = GetValue(SapUserKey),
                 SapPassword = GetValue(SapPasswordKey)
             };
+        }
+
+        private static int GetIntValue(string key, int defaultValue)
+        {
+            return int.TryParse(GetValue(key), out int value) ? value : defaultValue;
+        }
+
+        private static bool GetBoolValue(string key)
+        {
+            return bool.TryParse(GetValue(key), out bool value) && value;
         }
 
         private static void Set(Configuration config, string key, string value)
