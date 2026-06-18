@@ -111,6 +111,9 @@ namespace CARGA_UDO
             selected.Name = txtNombreConexion.Text.Trim();
             selected.Server = txtServidor.Text.Trim();
             selected.LicenseServer = txtServidorLicencia.Text.Trim();
+            selected.SldServer = txtServidorSLD.Text.Trim();
+            selected.SapVersion = GetSapVersion();
+            selected.UseTrusted = chkUseTrusted.Checked;
             selected.CompanyDb = txtBaseCompania.Text.Trim();
             selected.DbServerType = GetSelectedServerType();
             selected.DbUser = txtUsuarioBD.Text.Trim();
@@ -140,6 +143,9 @@ namespace CARGA_UDO
             txtNombreConexion.Text = profile?.Name ?? string.Empty;
             txtServidor.Text = profile?.Server ?? string.Empty;
             txtServidorLicencia.Text = profile?.LicenseServer ?? string.Empty;
+            txtServidorSLD.Text = profile?.SldServer ?? string.Empty;
+            txtVersionSAP.Text = SapConnectionConfig.GetSapVersion(profile).ToString();
+            chkUseTrusted.Checked = profile?.UseTrusted == true;
             txtBaseCompania.Text = profile?.CompanyDb ?? string.Empty;
             txtUsuarioBD.Text = profile?.DbUser ?? string.Empty;
             txtClaveBD.Text = profile?.DbPassword ?? string.Empty;
@@ -158,18 +164,24 @@ namespace CARGA_UDO
         {
             if (string.IsNullOrWhiteSpace(txtNombreConexion.Text) ||
                 string.IsNullOrWhiteSpace(txtServidor.Text) ||
-                string.IsNullOrWhiteSpace(txtServidorLicencia.Text) ||
+                string.IsNullOrWhiteSpace(txtVersionSAP.Text) ||
                 string.IsNullOrWhiteSpace(txtBaseCompania.Text) ||
                 cmbTipoServidor.SelectedItem == null ||
-                string.IsNullOrWhiteSpace(txtUsuarioBD.Text) ||
-                string.IsNullOrWhiteSpace(txtUsuarioSAP.Text))
+                (!chkUseTrusted.Checked && GetSapVersion() < 10 && string.IsNullOrWhiteSpace(txtUsuarioBD.Text)) ||
+                string.IsNullOrWhiteSpace(txtUsuarioSAP.Text) ||
+                (GetSapVersion() < 10 && string.IsNullOrWhiteSpace(txtServidorLicencia.Text)))
             {
-                MessageBox.Show("Complete nombre, servidor, servidor de licencias, compañía, tipo de base de datos, usuario BD y usuario SAP.",
+                MessageBox.Show("Complete nombre, servidor, versión SAP, compañía, tipo de base de datos, usuario SAP y los datos requeridos para la versión seleccionada.",
                     "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
 
             return true;
+        }
+
+        private int GetSapVersion()
+        {
+            return int.TryParse(txtVersionSAP.Text.Trim(), out int version) && version > 0 ? version : 9;
         }
 
         private string GetSelectedServerType()

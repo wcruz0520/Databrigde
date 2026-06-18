@@ -11,6 +11,9 @@ namespace CARGA_UDO
         public string Name { get; set; }
         public string Server { get; set; }
         public string LicenseServer { get; set; }
+        public string SldServer { get; set; }
+        public int SapVersion { get; set; }
+        public bool UseTrusted { get; set; }
         public string CompanyDb { get; set; }
         public string DbServerType { get; set; }
         public string DbUser { get; set; }
@@ -23,11 +26,23 @@ namespace CARGA_UDO
         public bool IsConfigured()
         {
             return !string.IsNullOrWhiteSpace(Server)
-                && !string.IsNullOrWhiteSpace(LicenseServer)
+                && HasVersionServerConfigured()
                 && !string.IsNullOrWhiteSpace(CompanyDb)
                 && !string.IsNullOrWhiteSpace(DbServerType)
-                && !string.IsNullOrWhiteSpace(DbUser)
+                && (UseTrusted || SapVersion >= 10 || !string.IsNullOrWhiteSpace(DbUser))
                 && !string.IsNullOrWhiteSpace(SapUser);
+        }
+
+        public bool IsSap10OrNewer()
+        {
+            return SapVersion >= 10;
+        }
+
+        private bool HasVersionServerConfigured()
+        {
+            return IsSap10OrNewer()
+                ? !string.IsNullOrWhiteSpace(Server)
+                : !string.IsNullOrWhiteSpace(Server) && !string.IsNullOrWhiteSpace(LicenseServer);
         }
 
         public override string ToString()
@@ -41,6 +56,9 @@ namespace CARGA_UDO
         public const string ServerKey = "SapServer";
         public const string LicenseServerKey = "SapLicenseServer";
         public const string CompanyDbKey = "SapCompanyDb";
+        public const string SldServerKey = "SapSldServer";
+        public const string SapVersionKey = "SapVersion";
+        public const string UseTrustedKey = "SapUseTrusted";
         public const string DbServerTypeKey = "SapDbServerType";
         public const string DbUserKey = "SapDbUser";
         public const string DbPasswordKey = "SapDbPassword";
@@ -92,6 +110,16 @@ namespace CARGA_UDO
             return GetActiveProfile()?.IsConfigured() == true;
         }
 
+        public static int GetSapVersion(SapConnectionProfile profile)
+        {
+            return profile?.SapVersion > 0 ? profile.SapVersion : 9;
+        }
+
+        public static bool GetUseTrusted(SapConnectionProfile profile)
+        {
+            return profile?.UseTrusted == true;
+        }
+
         public static SAPbobsCOM.BoDataServerTypes GetDbServerType()
         {
             return GetDbServerType(GetActiveProfile());
@@ -116,16 +144,26 @@ namespace CARGA_UDO
             if (profile == null)
                 return;
 
-            company.Server = profile.Server;
-            company.LicenseServer = profile.LicenseServer;
-            company.CompanyDB = profile.CompanyDb;
             company.DbServerType = GetDbServerType(profile);
+            company.UseTrusted = GetUseTrusted(profile);
+            company.CompanyDB = profile.CompanyDb;
             company.UserName = profile.SapUser;
             company.Password = profile.SapPassword;
-            company.DbUserName = profile.DbUser;
-            company.DbPassword = profile.DbPassword;
-            company.UseTrusted = true;
-            company.SLDServer = profile.LicenseServer;
+            company.Server = profile.Server;
+
+            if (GetSapVersion(profile) < 10)
+            {
+                company.LicenseServer = profile.LicenseServer;
+                if (!company.UseTrusted)
+                {
+                    company.DbUserName = profile.DbUser;
+                    company.DbPassword = profile.DbPassword;
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(profile.SldServer))
+            {
+                company.SLDServer = profile.SldServer;
+            }
         }
 
         public static void SaveProfiles(IEnumerable<SapConnectionProfile> profiles, string activeId)
@@ -146,12 +184,15 @@ namespace CARGA_UDO
             ConfigurationManager.RefreshSection("appSettings");
         }
 
-        public static void Save(string server, string licenseServer, string companyDb, string dbServerType,
+        public static void Save(string server, string licenseServer, string sldServer, int sapVersion, bool useTrusted, string companyDb, string dbServerType,
             string dbUser, string dbPassword, string sapUser, string sapPassword)
         {
             SapConnectionProfile active = GetActiveProfile() ?? CreateNewProfile("Conexión SAP");
             active.Server = server;
             active.LicenseServer = licenseServer;
+            active.SldServer = sldServer;
+            active.SapVersion = sapVersion;
+            active.UseTrusted = useTrusted;
             active.CompanyDb = companyDb;
             active.DbServerType = dbServerType;
             active.DbUser = dbUser;
@@ -169,7 +210,7 @@ namespace CARGA_UDO
 
         public static SapConnectionProfile CreateNewProfile(string name)
         {
-            return new SapConnectionProfile { Id = Guid.NewGuid().ToString("N"), Name = name };
+            return new SapConnectionProfile { Id = Guid.NewGuid().ToString("N"), Name = name, SapVersion = 9 };
         }
 
         private static IEnumerable<string> GetProfileIds()
@@ -191,6 +232,9 @@ namespace CARGA_UDO
                 Name = GetValue(ProfileKey(id, "Name")),
                 Server = GetValue(ProfileKey(id, ServerKey)),
                 LicenseServer = GetValue(ProfileKey(id, LicenseServerKey)),
+                SldServer = GetValue(ProfileKey(id, SldServerKey)),
+                SapVersion = ParseSapVersion(GetValue(ProfileKey(id, SapVersionKey))),
+                UseTrusted = ParseBool(GetValue(ProfileKey(id, UseTrustedKey))),
                 CompanyDb = GetValue(ProfileKey(id, CompanyDbKey)),
                 DbServerType = GetValue(ProfileKey(id, DbServerTypeKey)),
                 DbUser = GetValue(ProfileKey(id, DbUserKey)),
@@ -205,6 +249,9 @@ namespace CARGA_UDO
             Set(config, ProfileKey(profile.Id, "Name"), profile.Name);
             Set(config, ProfileKey(profile.Id, ServerKey), profile.Server);
             Set(config, ProfileKey(profile.Id, LicenseServerKey), profile.LicenseServer);
+            Set(config, ProfileKey(profile.Id, SldServerKey), profile.SldServer);
+            Set(config, ProfileKey(profile.Id, SapVersionKey), GetSapVersion(profile).ToString());
+            Set(config, ProfileKey(profile.Id, UseTrustedKey), profile.UseTrusted.ToString());
             Set(config, ProfileKey(profile.Id, CompanyDbKey), profile.CompanyDb);
             Set(config, ProfileKey(profile.Id, DbServerTypeKey), profile.DbServerType);
             Set(config, ProfileKey(profile.Id, DbUserKey), profile.DbUser);
@@ -215,7 +262,7 @@ namespace CARGA_UDO
 
         private static void RemoveProfileSettings(Configuration config, string id)
         {
-            foreach (string key in new[] { "Name", ServerKey, LicenseServerKey, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey })
+            foreach (string key in new[] { "Name", ServerKey, LicenseServerKey, SldServerKey, SapVersionKey, UseTrustedKey, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey })
                 config.AppSettings.Settings.Remove(ProfileKey(id, key));
         }
 
@@ -238,6 +285,9 @@ namespace CARGA_UDO
                 Name = "Conexión SAP",
                 Server = GetValue(ServerKey),
                 LicenseServer = GetValue(LicenseServerKey),
+                SldServer = GetValue(SldServerKey),
+                SapVersion = ParseSapVersion(GetValue(SapVersionKey)),
+                UseTrusted = ParseBool(GetValue(UseTrustedKey)),
                 CompanyDb = GetValue(CompanyDbKey),
                 DbServerType = GetValue(DbServerTypeKey),
                 DbUser = GetValue(DbUserKey),
@@ -245,6 +295,16 @@ namespace CARGA_UDO
                 SapUser = GetValue(SapUserKey),
                 SapPassword = GetValue(SapPasswordKey)
             };
+        }
+
+        private static int ParseSapVersion(string value)
+        {
+            return int.TryParse(value, out int version) && version > 0 ? version : 9;
+        }
+
+        private static bool ParseBool(string value)
+        {
+            return bool.TryParse(value, out bool result) && result;
         }
 
         private static void Set(Configuration config, string key, string value)
