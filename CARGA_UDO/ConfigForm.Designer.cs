@@ -26,6 +26,11 @@
             this.txtServidor = new System.Windows.Forms.TextBox();
             this.lblServidorLicencia = new System.Windows.Forms.Label();
             this.txtServidorLicencia = new System.Windows.Forms.TextBox();
+            this.lblVersionSAP = new System.Windows.Forms.Label();
+            this.txtVersionSAP = new System.Windows.Forms.TextBox();
+            this.chkUseTrusted = new System.Windows.Forms.CheckBox();
+            this.lblServidorSLD = new System.Windows.Forms.Label();
+            this.txtServidorSLD = new System.Windows.Forms.TextBox();
             this.lblBaseCompania = new System.Windows.Forms.Label();
             this.txtBaseCompania = new System.Windows.Forms.TextBox();
             this.lblTipoServidor = new System.Windows.Forms.Label();
@@ -48,14 +53,14 @@
             this.lstConexiones.ItemHeight = 20;
             this.lstConexiones.Location = new System.Drawing.Point(24, 22);
             this.lstConexiones.Name = "lstConexiones";
-            this.lstConexiones.Size = new System.Drawing.Size(224, 384);
+            this.lstConexiones.Size = new System.Drawing.Size(224, 464);
             this.lstConexiones.TabIndex = 0;
             this.lstConexiones.SelectedIndexChanged += new System.EventHandler(this.lstConexiones_SelectedIndexChanged);
             //
             // btnAgregarConexion
             //
             this.btnAgregarConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.btnAgregarConexion.Location = new System.Drawing.Point(24, 420);
+            this.btnAgregarConexion.Location = new System.Drawing.Point(24, 500);
             this.btnAgregarConexion.Name = "btnAgregarConexion";
             this.btnAgregarConexion.Size = new System.Drawing.Size(104, 36);
             this.btnAgregarConexion.TabIndex = 1;
@@ -66,7 +71,7 @@
             // btnEliminarConexion
             //
             this.btnEliminarConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.btnEliminarConexion.Location = new System.Drawing.Point(144, 420);
+            this.btnEliminarConexion.Location = new System.Drawing.Point(144, 500);
             this.btnEliminarConexion.Name = "btnEliminarConexion";
             this.btnEliminarConexion.Size = new System.Drawing.Size(104, 36);
             this.btnEliminarConexion.TabIndex = 2;
@@ -128,11 +133,58 @@
             this.txtServidorLicencia.Size = new System.Drawing.Size(306, 26);
             this.txtServidorLicencia.TabIndex = 8;
             //
+            // lblVersionSAP
+            //
+            this.lblVersionSAP.AutoSize = true;
+            this.lblVersionSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
+            this.lblVersionSAP.Location = new System.Drawing.Point(278, 144);
+            this.lblVersionSAP.Name = "lblVersionSAP";
+            this.lblVersionSAP.Size = new System.Drawing.Size(83, 17);
+            this.lblVersionSAP.TabIndex = 9;
+            this.lblVersionSAP.Text = "Versión SAP";
+            //
+            // txtVersionSAP
+            //
+            this.txtVersionSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.txtVersionSAP.Location = new System.Drawing.Point(450, 141);
+            this.txtVersionSAP.Name = "txtVersionSAP";
+            this.txtVersionSAP.Size = new System.Drawing.Size(80, 26);
+            this.txtVersionSAP.TabIndex = 10;
+            //
+            // chkUseTrusted
+            //
+            this.chkUseTrusted.AutoSize = true;
+            this.chkUseTrusted.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
+            this.chkUseTrusted.Location = new System.Drawing.Point(560, 144);
+            this.chkUseTrusted.Name = "chkUseTrusted";
+            this.chkUseTrusted.Size = new System.Drawing.Size(109, 21);
+            this.chkUseTrusted.TabIndex = 11;
+            this.chkUseTrusted.Text = "Use trusted";
+            this.chkUseTrusted.UseVisualStyleBackColor = true;
+            //
+            // lblServidorSLD
+            //
+            this.lblServidorSLD.AutoSize = true;
+            this.lblServidorSLD.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
+            this.lblServidorSLD.Location = new System.Drawing.Point(278, 184);
+            this.lblServidorSLD.Name = "lblServidorSLD";
+            this.lblServidorSLD.Size = new System.Drawing.Size(93, 17);
+            this.lblServidorSLD.TabIndex = 12;
+            this.lblServidorSLD.Text = "Servidor SLD";
+            //
+            // txtServidorSLD
+            //
+            this.txtServidorSLD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
+            this.txtServidorSLD.Location = new System.Drawing.Point(450, 181);
+            this.txtServidorSLD.Name = "txtServidorSLD";
+            this.txtServidorSLD.Size = new System.Drawing.Size(306, 26);
+            this.txtServidorSLD.TabIndex = 13;
+            //
             // lblBaseCompania
             //
             this.lblBaseCompania.AutoSize = true;
             this.lblBaseCompania.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblBaseCompania.Location = new System.Drawing.Point(278, 144);
+            this.lblBaseCompania.Location = new System.Drawing.Point(278, 224);
             this.lblBaseCompania.Name = "lblBaseCompania";
             this.lblBaseCompania.Size = new System.Drawing.Size(105, 17);
             this.lblBaseCompania.TabIndex = 9;
@@ -141,7 +193,7 @@
             // txtBaseCompania
             //
             this.txtBaseCompania.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtBaseCompania.Location = new System.Drawing.Point(450, 141);
+            this.txtBaseCompania.Location = new System.Drawing.Point(450, 221);
             this.txtBaseCompania.Name = "txtBaseCompania";
             this.txtBaseCompania.Size = new System.Drawing.Size(306, 26);
             this.txtBaseCompania.TabIndex = 10;
@@ -150,7 +202,7 @@
             //
             this.lblTipoServidor.AutoSize = true;
             this.lblTipoServidor.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblTipoServidor.Location = new System.Drawing.Point(278, 184);
+            this.lblTipoServidor.Location = new System.Drawing.Point(278, 264);
             this.lblTipoServidor.Name = "lblTipoServidor";
             this.lblTipoServidor.Size = new System.Drawing.Size(110, 17);
             this.lblTipoServidor.TabIndex = 11;
@@ -161,7 +213,7 @@
             this.cmbTipoServidor.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbTipoServidor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cmbTipoServidor.FormattingEnabled = true;
-            this.cmbTipoServidor.Location = new System.Drawing.Point(450, 181);
+            this.cmbTipoServidor.Location = new System.Drawing.Point(450, 261);
             this.cmbTipoServidor.Name = "cmbTipoServidor";
             this.cmbTipoServidor.Size = new System.Drawing.Size(306, 28);
             this.cmbTipoServidor.TabIndex = 12;
@@ -170,7 +222,7 @@
             //
             this.lblUsuarioBD.AutoSize = true;
             this.lblUsuarioBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblUsuarioBD.Location = new System.Drawing.Point(278, 224);
+            this.lblUsuarioBD.Location = new System.Drawing.Point(278, 304);
             this.lblUsuarioBD.Name = "lblUsuarioBD";
             this.lblUsuarioBD.Size = new System.Drawing.Size(80, 17);
             this.lblUsuarioBD.TabIndex = 13;
@@ -179,7 +231,7 @@
             // txtUsuarioBD
             //
             this.txtUsuarioBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtUsuarioBD.Location = new System.Drawing.Point(450, 221);
+            this.txtUsuarioBD.Location = new System.Drawing.Point(450, 301);
             this.txtUsuarioBD.Name = "txtUsuarioBD";
             this.txtUsuarioBD.Size = new System.Drawing.Size(306, 26);
             this.txtUsuarioBD.TabIndex = 14;
@@ -188,7 +240,7 @@
             //
             this.lblClaveBD.AutoSize = true;
             this.lblClaveBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblClaveBD.Location = new System.Drawing.Point(278, 264);
+            this.lblClaveBD.Location = new System.Drawing.Point(278, 344);
             this.lblClaveBD.Name = "lblClaveBD";
             this.lblClaveBD.Size = new System.Drawing.Size(66, 17);
             this.lblClaveBD.TabIndex = 15;
@@ -197,7 +249,7 @@
             // txtClaveBD
             //
             this.txtClaveBD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtClaveBD.Location = new System.Drawing.Point(450, 261);
+            this.txtClaveBD.Location = new System.Drawing.Point(450, 341);
             this.txtClaveBD.Name = "txtClaveBD";
             this.txtClaveBD.PasswordChar = '*';
             this.txtClaveBD.Size = new System.Drawing.Size(306, 26);
@@ -207,7 +259,7 @@
             //
             this.lblUsuarioSAP.AutoSize = true;
             this.lblUsuarioSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblUsuarioSAP.Location = new System.Drawing.Point(278, 304);
+            this.lblUsuarioSAP.Location = new System.Drawing.Point(278, 384);
             this.lblUsuarioSAP.Name = "lblUsuarioSAP";
             this.lblUsuarioSAP.Size = new System.Drawing.Size(88, 17);
             this.lblUsuarioSAP.TabIndex = 17;
@@ -216,7 +268,7 @@
             // txtUsuarioSAP
             //
             this.txtUsuarioSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtUsuarioSAP.Location = new System.Drawing.Point(450, 301);
+            this.txtUsuarioSAP.Location = new System.Drawing.Point(450, 381);
             this.txtUsuarioSAP.Name = "txtUsuarioSAP";
             this.txtUsuarioSAP.Size = new System.Drawing.Size(306, 26);
             this.txtUsuarioSAP.TabIndex = 18;
@@ -225,7 +277,7 @@
             //
             this.lblClaveSAP.AutoSize = true;
             this.lblClaveSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblClaveSAP.Location = new System.Drawing.Point(278, 344);
+            this.lblClaveSAP.Location = new System.Drawing.Point(278, 424);
             this.lblClaveSAP.Name = "lblClaveSAP";
             this.lblClaveSAP.Size = new System.Drawing.Size(74, 17);
             this.lblClaveSAP.TabIndex = 19;
@@ -234,7 +286,7 @@
             // txtClaveSAP
             //
             this.txtClaveSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtClaveSAP.Location = new System.Drawing.Point(450, 341);
+            this.txtClaveSAP.Location = new System.Drawing.Point(450, 421);
             this.txtClaveSAP.Name = "txtClaveSAP";
             this.txtClaveSAP.PasswordChar = '*';
             this.txtClaveSAP.Size = new System.Drawing.Size(306, 26);
@@ -243,7 +295,7 @@
             // btnGuardar
             //
             this.btnGuardar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.btnGuardar.Location = new System.Drawing.Point(519, 420);
+            this.btnGuardar.Location = new System.Drawing.Point(519, 500);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(105, 36);
             this.btnGuardar.TabIndex = 21;
@@ -254,7 +306,7 @@
             // btnCancelar
             //
             this.btnCancelar.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.btnCancelar.Location = new System.Drawing.Point(651, 420);
+            this.btnCancelar.Location = new System.Drawing.Point(651, 500);
             this.btnCancelar.Name = "btnCancelar";
             this.btnCancelar.Size = new System.Drawing.Size(105, 36);
             this.btnCancelar.TabIndex = 22;
@@ -266,10 +318,15 @@
             //
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(786, 478);
+            this.ClientSize = new System.Drawing.Size(786, 558);
             this.Controls.Add(this.btnCancelar);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.txtClaveSAP);
+            this.Controls.Add(this.lblServidorSLD);
+            this.Controls.Add(this.txtServidorSLD);
+            this.Controls.Add(this.chkUseTrusted);
+            this.Controls.Add(this.txtVersionSAP);
+            this.Controls.Add(this.lblVersionSAP);
             this.Controls.Add(this.lblClaveSAP);
             this.Controls.Add(this.txtUsuarioSAP);
             this.Controls.Add(this.lblUsuarioSAP);
@@ -312,6 +369,11 @@
         private System.Windows.Forms.TextBox txtServidor;
         private System.Windows.Forms.Label lblServidorLicencia;
         private System.Windows.Forms.TextBox txtServidorLicencia;
+        private System.Windows.Forms.Label lblVersionSAP;
+        private System.Windows.Forms.TextBox txtVersionSAP;
+        private System.Windows.Forms.CheckBox chkUseTrusted;
+        private System.Windows.Forms.Label lblServidorSLD;
+        private System.Windows.Forms.TextBox txtServidorSLD;
         private System.Windows.Forms.Label lblBaseCompania;
         private System.Windows.Forms.TextBox txtBaseCompania;
         private System.Windows.Forms.Label lblTipoServidor;
