@@ -199,7 +199,8 @@ namespace CARGA_UDO
         {
             if (this.btnConectar.IconChar == IconChar.PlugCircleCheck)
             {
-                ConectarSAP();
+                if (ConectarSAP())
+                    btnCargar.Enabled = true;
             }
             else
             {
@@ -227,6 +228,10 @@ namespace CARGA_UDO
                                     "Error",
                                     MessageBoxButtons.OK,
                                     MessageBoxIcon.Error);
+                }
+                finally
+                {
+                    btnCargar.Enabled = false;
                 }
             }
         }
