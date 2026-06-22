@@ -289,15 +289,18 @@
             // chckUseTrusted
             // 
             this.chckUseTrusted.AutoSize = true;
+            this.chckUseTrusted.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.chckUseTrusted.Location = new System.Drawing.Point(450, 174);
             this.chckUseTrusted.Name = "chckUseTrusted";
-            this.chckUseTrusted.Size = new System.Drawing.Size(89, 24);
+            this.chckUseTrusted.Size = new System.Drawing.Size(83, 21);
             this.chckUseTrusted.TabIndex = 25;
             this.chckUseTrusted.Text = "Trusted";
             this.chckUseTrusted.UseVisualStyleBackColor = true;
             // 
             // nudVersionSAP
             // 
+            this.nudVersionSAP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.nudVersionSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.nudVersionSAP.Location = new System.Drawing.Point(450, 55);
             this.nudVersionSAP.Minimum = new decimal(new int[] {
             1,
@@ -305,7 +308,7 @@
             0,
             0});
             this.nudVersionSAP.Name = "nudVersionSAP";
-            this.nudVersionSAP.Size = new System.Drawing.Size(72, 26);
+            this.nudVersionSAP.Size = new System.Drawing.Size(72, 23);
             this.nudVersionSAP.TabIndex = 26;
             this.nudVersionSAP.Value = new decimal(new int[] {
             10,

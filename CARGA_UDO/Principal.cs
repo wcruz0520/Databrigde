@@ -65,6 +65,7 @@ namespace CARGA_UDO
             cmbTipoObj.Enabled = false;
 
             rdbAgregarActualizar.Checked = true;
+            btnCargar.Enabled = false;
         }
 
         private string ObtenerModoCargaSeleccionado()
