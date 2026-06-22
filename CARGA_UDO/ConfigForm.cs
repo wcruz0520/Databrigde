@@ -168,6 +168,7 @@ namespace CARGA_UDO
             SelectConnectionMethod(profile?.ConnectionMethod ?? SapConnectionMethod.DiApi);
             SelectServerType(profile?.DbServerType);
             loadingProfile = false;
+            ActualizarCamposPorMedioConexion();
         }
 
         private SapConnectionProfile GetSelectedProfile()
@@ -177,13 +178,32 @@ namespace CARGA_UDO
 
         private bool ValidarCampos()
         {
+            SapConnectionMethod method = GetSelectedConnectionMethod();
+
             if (string.IsNullOrWhiteSpace(txtNombreConexion.Text) ||
-                string.IsNullOrWhiteSpace(txtServidor.Text) ||
                 string.IsNullOrWhiteSpace(txtBaseCompania.Text) ||
-                cmbTipoServidor.SelectedItem == null ||
                 string.IsNullOrWhiteSpace(txtUsuarioSAP.Text))
             {
-                MessageBox.Show("Complete nombre, servidor, compañía, tipo de base de datos y usuario SAP.",
+                MessageBox.Show("Complete nombre, compañía y usuario SAP.",
+                    "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
+            if (method == SapConnectionMethod.ServiceLayer)
+            {
+                if (string.IsNullOrWhiteSpace(txtServiceLayerUrl.Text))
+                {
+                    MessageBox.Show("Para Service Layer complete la URL del servicio.",
+                        "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtServidor.Text) || cmbTipoServidor.SelectedItem == null)
+            {
+                MessageBox.Show("Para DI API complete servidor SAP y tipo de base de datos.",
                     "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return false;
             }
@@ -205,14 +225,82 @@ namespace CARGA_UDO
                 return false;
             }
 
-            if (GetSelectedConnectionMethod() == SapConnectionMethod.ServiceLayer && string.IsNullOrWhiteSpace(txtServiceLayerUrl.Text))
-            {
-                MessageBox.Show("Para Service Layer complete la URL del servicio.",
-                    "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
             return true;
+        }
+
+
+        private void cmbMedioConexion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (loadingProfile)
+                return;
+
+            ActualizarCamposPorMedioConexion();
+        }
+
+        private void ActualizarCamposPorMedioConexion()
+        {
+            bool esServiceLayer = GetSelectedConnectionMethod() == SapConnectionMethod.ServiceLayer;
+
+            lblServiceLayerUrl.Visible = esServiceLayer;
+            txtServiceLayerUrl.Visible = esServiceLayer;
+
+            lblServidor.Visible = !esServiceLayer;
+            txtServidor.Visible = !esServiceLayer;
+            label2.Visible = !esServiceLayer;
+            nudVersionSAP.Visible = !esServiceLayer;
+            lblServidorLicencia.Visible = !esServiceLayer;
+            txtServidorLicencia.Visible = !esServiceLayer;
+            label1.Visible = !esServiceLayer;
+            txtServidorSLD.Visible = !esServiceLayer;
+            chckUseTrusted.Visible = !esServiceLayer;
+            lblTipoServidor.Visible = !esServiceLayer;
+            cmbTipoServidor.Visible = !esServiceLayer;
+            lblUsuarioBD.Visible = !esServiceLayer;
+            txtUsuarioBD.Visible = !esServiceLayer;
+            lblClaveBD.Visible = !esServiceLayer;
+            txtClaveBD.Visible = !esServiceLayer;
+
+            if (esServiceLayer)
+                OrganizarCamposServiceLayer();
+            else
+                OrganizarCamposDiApi();
+        }
+
+        private void OrganizarCamposServiceLayer()
+        {
+            SetTop(lblNombreConexion, txtNombreConexion, 55);
+            SetTop(lblBaseCompania, txtBaseCompania, 89);
+            SetTop(lblUsuarioSAP, txtUsuarioSAP, 123);
+            SetTop(lblClaveSAP, txtClaveSAP, 157);
+            SetTop(lblServiceLayerUrl, txtServiceLayerUrl, 191);
+            btnGuardar.Top = 235;
+            btnCancelar.Top = 235;
+            ClientSize = new System.Drawing.Size(ClientSize.Width, 291);
+        }
+
+        private void OrganizarCamposDiApi()
+        {
+            SetTop(lblNombreConexion, txtNombreConexion, 55);
+            SetTop(label2, nudVersionSAP, 89);
+            SetTop(lblServidor, txtServidor, 123);
+            SetTop(lblServidorLicencia, txtServidorLicencia, 163);
+            SetTop(label1, txtServidorSLD, 208);
+            chckUseTrusted.Top = 208;
+            SetTop(lblBaseCompania, txtBaseCompania, 247);
+            SetTop(lblTipoServidor, cmbTipoServidor, 287);
+            SetTop(lblUsuarioBD, txtUsuarioBD, 327);
+            SetTop(lblClaveBD, txtClaveBD, 367);
+            SetTop(lblUsuarioSAP, txtUsuarioSAP, 407);
+            SetTop(lblClaveSAP, txtClaveSAP, 447);
+            btnGuardar.Top = 522;
+            btnCancelar.Top = 522;
+            ClientSize = new System.Drawing.Size(ClientSize.Width, 588);
+        }
+
+        private void SetTop(Control label, Control input, int top)
+        {
+            label.Top = top + 3;
+            input.Top = top;
         }
 
         private SapConnectionMethod GetSelectedConnectionMethod()

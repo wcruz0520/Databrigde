@@ -33,17 +33,18 @@ namespace CARGA_UDO
 
         public bool IsConfigured()
         {
+            if (string.IsNullOrWhiteSpace(CompanyDb) || string.IsNullOrWhiteSpace(SapUser))
+                return false;
+
+            if (ConnectionMethod == SapConnectionMethod.ServiceLayer)
+                return !string.IsNullOrWhiteSpace(ServiceLayerUrl);
+
             if (Version <= 0
                 || string.IsNullOrWhiteSpace(Server)
-                || string.IsNullOrWhiteSpace(CompanyDb)
-                || string.IsNullOrWhiteSpace(DbServerType)
-                || string.IsNullOrWhiteSpace(SapUser))
+                || string.IsNullOrWhiteSpace(DbServerType))
             {
                 return false;
             }
-
-            if (ConnectionMethod == SapConnectionMethod.ServiceLayer && string.IsNullOrWhiteSpace(ServiceLayerUrl))
-                return false;
 
             if (Version < 10)
             {

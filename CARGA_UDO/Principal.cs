@@ -118,8 +118,18 @@ namespace CARGA_UDO
                     return false;
                 }
 
-                Globals.rCompany = new SAPbobsCOM.Company();
                 activeConnectionProfile = activeProfile;
+
+                if (activeProfile.ConnectionMethod == SapConnectionMethod.ServiceLayer)
+                {
+                    var client = new SapServiceLayerClient(activeProfile);
+                    client.Login();
+                    Globals.rCompany = null;
+                    ActualizarEstadoConexion(true);
+                    return true;
+                }
+
+                Globals.rCompany = new SAPbobsCOM.Company();
                 SapConnectionConfig.ApplyToCompany(Globals.rCompany, activeProfile);
 
                 ret = Globals.rCompany.Connect();
@@ -148,6 +158,19 @@ namespace CARGA_UDO
 
         private void ActualizarEstadoConexion(bool conectado)
         {
+            if (conectado && UsarServiceLayer())
+            {
+                this.Text = $"Databrigde (conectado por Service Layer a {activeConnectionProfile.CompanyDb} - {activeConnectionProfile.SapUser})";
+                this.btnConectar.Text = "";
+                this.btnConectar.Enabled = true;
+                this.btnConectar.IconColor = Color.Red;
+                this.btnConectar.IconChar = IconChar.PlugCircleXmark;
+                this.btnProccess.Enabled = true;
+                this.cmbConexiones.Enabled = false;
+                cmbTipoObj.Enabled = true;
+                return;
+            }
+
             if (conectado && Globals.rCompany != null && Globals.rCompany.Connected)
             {
                 this.Text = $"Databrigde (conectado a {Globals.rCompany.CompanyDB} - {Globals.rCompany.UserName})";//$"Databrigde {Globals.rCompany.CompanyName.ToString().ToUpper()}";
@@ -171,6 +194,7 @@ namespace CARGA_UDO
             this.btnConectar.IconChar = IconChar.PlugCircleCheck;
             this.btnProccess.Enabled = false;
             this.cmbConexiones.Enabled = true;
+            cmbTipoObj.Enabled = false;
             //this.txtBoxBD.Text = $"Compania: ";
             //this.txtBoxUser.Text = $"Usuario: ";
         }
@@ -499,6 +523,9 @@ namespace CARGA_UDO
                 string objeto = txtTableName.Text.Trim();                 // UDO Code o tabla (según tu uso)
                 string tipoObj = IdentificarTipoTablaSeleccionada(objeto); // Tipo de tabla según OUTB
                 string modoCarga = ObtenerModoCargaSeleccionado(); // "I", "U", "A"
+
+                if (UsarServiceLayer() && tipoObj != "M" && tipoObj != "D")
+                    throw new Exception("Con Service Layer seleccione manualmente Datos Maestro o Documentos antes de procesar.");
 
                 if (EsTipoLinea(tipoObj))
                 {
@@ -830,6 +857,9 @@ namespace CARGA_UDO
 
         private string IdentificarTipoTablaSeleccionada(string tabla)
         {
+            if (UsarServiceLayer())
+                return cmbTipoObj.SelectedValue?.ToString() ?? "NO";
+
             string tipoObj = ObtenerTipoTablaDesdeOUTB(tabla);
 
             if (!string.IsNullOrWhiteSpace(tipoObj))
@@ -1104,7 +1134,12 @@ namespace CARGA_UDO
         }
 
         private bool ExisteRegistro_Maestro(string tablaOudo, string code)
-            => ExisteRegistroPorCode(tablaOudo, code);
+        {
+            if (UsarServiceLayer())
+                return ExisteRegistroServiceLayer(tablaOudo, code, false);
+
+            return ExisteRegistroPorCode(tablaOudo, code);
+        }
 
         private bool ExisteRegistro_NoObjeto(string tabla, string code)
             => ExisteRegistroPorCode(tabla, code);
@@ -1127,6 +1162,9 @@ namespace CARGA_UDO
 
         private bool ExisteRegistro_Documento(string udoCode, string docEntry)
         {
+            if (UsarServiceLayer())
+                return ExisteRegistroServiceLayer(udoCode, docEntry, true);
+
             int de;
             if (!int.TryParse(docEntry, out de)) return false;
 
@@ -1148,6 +1186,17 @@ namespace CARGA_UDO
             {
                 return false;
             }
+        }
+
+
+        private bool ExisteRegistroServiceLayer(string entitySet, string keyValue, bool numericKey)
+        {
+            if (string.IsNullOrWhiteSpace(keyValue))
+                return false;
+
+            var client = new SapServiceLayerClient(activeConnectionProfile);
+            client.Login();
+            return client.Exists(entitySet, keyValue, numericKey);
         }
 
         private string ObtenerValorCampo(Dictionary<string, object> campos, params string[] nombres)

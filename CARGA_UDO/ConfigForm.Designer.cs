@@ -88,7 +88,7 @@ namespace CARGA_UDO
             //
             this.lblNombreConexion.AutoSize = true;
             this.lblNombreConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblNombreConexion.Location = new System.Drawing.Point(278, 24);
+            this.lblNombreConexion.Location = new System.Drawing.Point(278, 58);
             this.lblNombreConexion.Name = "lblNombreConexion";
             this.lblNombreConexion.Size = new System.Drawing.Size(58, 17);
             this.lblNombreConexion.TabIndex = 3;
@@ -97,7 +97,7 @@ namespace CARGA_UDO
             // txtNombreConexion
             //
             this.txtNombreConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
-            this.txtNombreConexion.Location = new System.Drawing.Point(450, 21);
+            this.txtNombreConexion.Location = new System.Drawing.Point(450, 55);
             this.txtNombreConexion.Name = "txtNombreConexion";
             this.txtNombreConexion.Size = new System.Drawing.Size(306, 26);
             this.txtNombreConexion.TabIndex = 4;
@@ -305,7 +305,7 @@ namespace CARGA_UDO
             //
             this.nudVersionSAP.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.nudVersionSAP.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.nudVersionSAP.Location = new System.Drawing.Point(450, 55);
+            this.nudVersionSAP.Location = new System.Drawing.Point(450, 89);
             this.nudVersionSAP.Minimum = new decimal(new int[] {
             1,
             0,
@@ -324,7 +324,7 @@ namespace CARGA_UDO
             //
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.label2.Location = new System.Drawing.Point(278, 58);
+            this.label2.Location = new System.Drawing.Point(278, 92);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(87, 17);
             this.label2.TabIndex = 27;
@@ -334,7 +334,7 @@ namespace CARGA_UDO
             //
             this.lblMedioConexion.AutoSize = true;
             this.lblMedioConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F);
-            this.lblMedioConexion.Location = new System.Drawing.Point(278, 92);
+            this.lblMedioConexion.Location = new System.Drawing.Point(278, 24);
             this.lblMedioConexion.Name = "lblMedioConexion";
             this.lblMedioConexion.Size = new System.Drawing.Size(121, 17);
             this.lblMedioConexion.TabIndex = 28;
@@ -345,10 +345,11 @@ namespace CARGA_UDO
             this.cmbMedioConexion.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cmbMedioConexion.Font = new System.Drawing.Font("Microsoft Sans Serif", 8F);
             this.cmbMedioConexion.FormattingEnabled = true;
-            this.cmbMedioConexion.Location = new System.Drawing.Point(450, 89);
+            this.cmbMedioConexion.Location = new System.Drawing.Point(450, 21);
             this.cmbMedioConexion.Name = "cmbMedioConexion";
             this.cmbMedioConexion.Size = new System.Drawing.Size(306, 28);
             this.cmbMedioConexion.TabIndex = 29;
+            this.cmbMedioConexion.SelectedIndexChanged += new System.EventHandler(this.cmbMedioConexion_SelectedIndexChanged);
             //
             // lblServiceLayerUrl
             //
