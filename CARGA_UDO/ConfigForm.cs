@@ -273,9 +273,9 @@ namespace CARGA_UDO
             SetTop(lblUsuarioSAP, txtUsuarioSAP, 123);
             SetTop(lblClaveSAP, txtClaveSAP, 157);
             SetTop(lblServiceLayerUrl, txtServiceLayerUrl, 191);
-            btnGuardar.Top = 235;
-            btnCancelar.Top = 235;
-            ClientSize = new System.Drawing.Size(ClientSize.Width, 291);
+            //btnGuardar.Top = 235;
+            //btnCancelar.Top = 235;
+            //ClientSize = new System.Drawing.Size(ClientSize.Width, 291);
         }
 
         private void OrganizarCamposDiApi()
@@ -292,9 +292,9 @@ namespace CARGA_UDO
             SetTop(lblClaveBD, txtClaveBD, 367);
             SetTop(lblUsuarioSAP, txtUsuarioSAP, 407);
             SetTop(lblClaveSAP, txtClaveSAP, 447);
-            btnGuardar.Top = 522;
-            btnCancelar.Top = 522;
-            ClientSize = new System.Drawing.Size(ClientSize.Width, 588);
+            //btnGuardar.Top = 522;
+            //btnCancelar.Top = 522;
+            //ClientSize = new System.Drawing.Size(ClientSize.Width, 588);
         }
 
         private void SetTop(Control label, Control input, int top)
