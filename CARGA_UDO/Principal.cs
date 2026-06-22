@@ -1,4 +1,4 @@
-﻿using CARGA_UDO.Entidades;
+using CARGA_UDO.Entidades;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +25,7 @@ namespace CARGA_UDO
         public bool resultproceso = false;
         public string msg_error = "";
         private bool cancelarProceso = false;
+        private SapConnectionProfile activeConnectionProfile;
 
         public SAPbouiCOM.Application rSboApp;
         public SAPbouiCOM.SboGuiApi rSboGui;
@@ -102,7 +103,7 @@ namespace CARGA_UDO
             {
                 if (!SapConnectionConfig.IsConfigured())
                 {
-                    MessageBox.Show("Configure la conexión DI API antes de conectar.",
+                    MessageBox.Show("Configure la conexión SAP antes de conectar.",
                                     "Configuración requerida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     ActualizarEstadoConexion(false);
                     return false;
@@ -118,6 +119,7 @@ namespace CARGA_UDO
                 }
 
                 Globals.rCompany = new SAPbobsCOM.Company();
+                activeConnectionProfile = activeProfile;
                 SapConnectionConfig.ApplyToCompany(Globals.rCompany, activeProfile);
 
                 ret = Globals.rCompany.Connect();
@@ -125,7 +127,7 @@ namespace CARGA_UDO
                 {
                     Globals.rCompany.GetLastError(out int errorCode, out string errorMsg);
                     Globals.rCompany = null;
-                    MessageBox.Show($"Error al conectar DI API ({errorCode}): {errorMsg}",
+                    MessageBox.Show($"Error al conectar SAP ({errorCode}): {errorMsg}",
                                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     ActualizarEstadoConexion(false);
                     return false;
@@ -138,7 +140,7 @@ namespace CARGA_UDO
             {
                 Globals.rCompany = null;
                 ActualizarEstadoConexion(false);
-                MessageBox.Show("Error conectando a SAP por DI API: " + ex.Message,
+                MessageBox.Show("Error conectando a SAP: " + ex.Message,
                                 "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -928,6 +930,9 @@ namespace CARGA_UDO
 
         private bool IniciarTransaccionSAP()
         {
+            if (UsarServiceLayer())
+                return false;
+
             if (Globals.rCompany != null && Globals.rCompany.Connected && !Globals.rCompany.InTransaction)
             {
                 Globals.rCompany.StartTransaction();
@@ -1325,6 +1330,11 @@ namespace CARGA_UDO
         {
             try
             {
+                if (UsarServiceLayer())
+                {
+                    GuardarMaestroServiceLayer(udoCode, registro, hijos);
+                    return;
+                }
                 var srv = Globals.rCompany.GetCompanyService();
                 var genSrv = srv.GetGeneralService(udoCode);
 
@@ -1442,6 +1452,11 @@ namespace CARGA_UDO
         {
             try
             {
+                if (UsarServiceLayer())
+                {
+                    GuardarDocumentoServiceLayer(udoCode, cab, hijos);
+                    return;
+                }
                 var srv = Globals.rCompany.GetCompanyService();
                 var genSrv = srv.GetGeneralService(udoCode);
 
@@ -1486,6 +1501,87 @@ namespace CARGA_UDO
                 resultproceso = false;
                 msg_error = "Error al guardar Documento: " + ex.Message;
             }
+        }
+
+
+        private bool UsarServiceLayer()
+        {
+            return activeConnectionProfile?.ConnectionMethod == SapConnectionMethod.ServiceLayer;
+        }
+
+        private Dictionary<string, object> ConstruirPayloadServiceLayer(RegistroTabla cabecera, List<(string tablaHija, List<RegistroTabla> registros)> hijos, string keyName, bool incluirLlave)
+        {
+            var payload = new Dictionary<string, object>();
+
+            if (incluirLlave && !string.IsNullOrWhiteSpace(cabecera.KeyValue))
+                payload[keyName] = keyName == "DocEntry" && int.TryParse(cabecera.KeyValue, out int docEntry) ? (object)docEntry : cabecera.KeyValue;
+
+            foreach (var campo in cabecera.Campos)
+            {
+                if (campo.Value == null || string.IsNullOrWhiteSpace(campo.Value.ToString()))
+                    continue;
+
+                payload[campo.Key] = campo.Value;
+            }
+
+            foreach (var hijo in hijos)
+            {
+                var lineas = new List<Dictionary<string, object>>();
+                foreach (var registroHijo in hijo.registros)
+                {
+                    var linea = new Dictionary<string, object>();
+                    foreach (var campo in registroHijo.Campos)
+                    {
+                        if (campo.Value == null || string.IsNullOrWhiteSpace(campo.Value.ToString()))
+                            continue;
+
+                        string nombreCampo = campo.Key ?? string.Empty;
+                        if (string.Equals(nombreCampo, "LineNum", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(nombreCampo, "VisOrder", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(nombreCampo, "Object", StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(nombreCampo, "LogInst", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        linea[nombreCampo] = campo.Value;
+                    }
+                    lineas.Add(linea);
+                }
+
+                payload[hijo.tablaHija] = lineas;
+            }
+
+            return payload;
+        }
+
+        private void GuardarMaestroServiceLayer(string udoCode, RegistroTabla registro, List<(string tablaHija, List<RegistroTabla> registros)> hijos)
+        {
+            var client = new SapServiceLayerClient(activeConnectionProfile);
+            client.Login();
+            bool existe = client.Exists(udoCode, registro.KeyValue, false);
+            var payload = ConstruirPayloadServiceLayer(registro, hijos, "Code", !existe);
+
+            if (existe)
+                client.Update(udoCode, registro.KeyValue, false, payload);
+            else
+                client.Add(udoCode, payload);
+
+            resultproceso = true;
+        }
+
+        private void GuardarDocumentoServiceLayer(string udoCode, RegistroTabla cab, List<(string tablaHija, List<RegistroTabla> registros)> hijos)
+        {
+            var client = new SapServiceLayerClient(activeConnectionProfile);
+            client.Login();
+            bool tieneDocEntry = int.TryParse(cab.KeyValue, out _);
+            bool existe = tieneDocEntry && client.Exists(udoCode, cab.KeyValue, true);
+            var payload = ConstruirPayloadServiceLayer(cab, hijos, "DocEntry", false);
+
+            if (existe)
+                client.Update(udoCode, cab.KeyValue, true, payload);
+            else
+                client.Add(udoCode, payload);
+
+            resultproceso = true;
         }
 
         private bool ExisteCampo(Dictionary<string, object> campos, string nombreCampo)

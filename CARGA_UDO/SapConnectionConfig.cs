@@ -5,6 +5,12 @@ using System.Linq;
 
 namespace CARGA_UDO
 {
+    public enum SapConnectionMethod
+    {
+        DiApi,
+        ServiceLayer
+    }
+
     public class SapConnectionProfile
     {
         public string Id { get; set; }
@@ -20,6 +26,8 @@ namespace CARGA_UDO
         public string DbPassword { get; set; }
         public string SapUser { get; set; }
         public string SapPassword { get; set; }
+        public SapConnectionMethod ConnectionMethod { get; set; } = SapConnectionMethod.DiApi;
+        public string ServiceLayerUrl { get; set; }
 
         public string DisplayName => string.IsNullOrWhiteSpace(Name) ? $"{Server} - {CompanyDb}" : Name;
 
@@ -33,6 +41,9 @@ namespace CARGA_UDO
             {
                 return false;
             }
+
+            if (ConnectionMethod == SapConnectionMethod.ServiceLayer && string.IsNullOrWhiteSpace(ServiceLayerUrl))
+                return false;
 
             if (Version < 10)
             {
@@ -62,6 +73,8 @@ namespace CARGA_UDO
         public const string DbPasswordKey = "SapDbPassword";
         public const string SapUserKey = "SapUser";
         public const string SapPasswordKey = "SapPassword";
+        public const string ConnectionMethodKey = "SapConnectionMethod";
+        public const string ServiceLayerUrlKey = "SapServiceLayerUrl";
         public const string ActiveConnectionIdKey = "SapActiveConnectionId";
         private const string ConnectionIdsKey = "SapConnectionIds";
         private const string ProfilePrefix = "SapConnection.";
@@ -221,7 +234,9 @@ namespace CARGA_UDO
                 DbUser = GetValue(ProfileKey(id, DbUserKey)),
                 DbPassword = GetValue(ProfileKey(id, DbPasswordKey)),
                 SapUser = GetValue(ProfileKey(id, SapUserKey)),
-                SapPassword = GetValue(ProfileKey(id, SapPasswordKey))
+                SapPassword = GetValue(ProfileKey(id, SapPasswordKey)),
+                ConnectionMethod = GetConnectionMethod(ProfileKey(id, ConnectionMethodKey)),
+                ServiceLayerUrl = GetValue(ProfileKey(id, ServiceLayerUrlKey))
             };
         }
 
@@ -239,11 +254,13 @@ namespace CARGA_UDO
             Set(config, ProfileKey(profile.Id, DbPasswordKey), profile.DbPassword);
             Set(config, ProfileKey(profile.Id, SapUserKey), profile.SapUser);
             Set(config, ProfileKey(profile.Id, SapPasswordKey), profile.SapPassword);
+            Set(config, ProfileKey(profile.Id, ConnectionMethodKey), profile.ConnectionMethod.ToString());
+            Set(config, ProfileKey(profile.Id, ServiceLayerUrlKey), profile.ServiceLayerUrl);
         }
 
         private static void RemoveProfileSettings(Configuration config, string id)
         {
-            foreach (string key in new[] { "Name", ServerKey, Version, LicenseServerKey, UseTrusted, SLDServer, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey })
+            foreach (string key in new[] { "Name", ServerKey, Version, LicenseServerKey, UseTrusted, SLDServer, CompanyDbKey, DbServerTypeKey, DbUserKey, DbPasswordKey, SapUserKey, SapPasswordKey, ConnectionMethodKey, ServiceLayerUrlKey })
                 config.AppSettings.Settings.Remove(ProfileKey(id, key));
         }
 
@@ -274,13 +291,20 @@ namespace CARGA_UDO
                 DbUser = GetValue(DbUserKey),
                 DbPassword = GetValue(DbPasswordKey),
                 SapUser = GetValue(SapUserKey),
-                SapPassword = GetValue(SapPasswordKey)
+                SapPassword = GetValue(SapPasswordKey),
+                ConnectionMethod = GetConnectionMethod(ConnectionMethodKey),
+                ServiceLayerUrl = GetValue(ServiceLayerUrlKey)
             };
         }
 
         private static int GetIntValue(string key, int defaultValue)
         {
             return int.TryParse(GetValue(key), out int value) ? value : defaultValue;
+        }
+
+        private static SapConnectionMethod GetConnectionMethod(string key)
+        {
+            return Enum.TryParse(GetValue(key), out SapConnectionMethod method) ? method : SapConnectionMethod.DiApi;
         }
 
         private static bool GetBoolValue(string key)

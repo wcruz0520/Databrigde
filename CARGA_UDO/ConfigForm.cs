@@ -21,6 +21,7 @@ namespace CARGA_UDO
         private void ConfigForm_Load(object sender, EventArgs e)
         {
             CargarTiposServidor();
+            CargarMediosConexion();
             profiles.Clear();
             profiles.AddRange(SapConnectionConfig.GetProfiles());
             activeProfileId = SapConnectionConfig.GetActiveProfile()?.Id;
@@ -29,6 +30,16 @@ namespace CARGA_UDO
                 profiles.Add(SapConnectionConfig.CreateNewProfile("Conexión SAP 1"));
 
             RefrescarListaConexiones(activeProfileId ?? profiles[0].Id);
+        }
+
+        private void CargarMediosConexion()
+        {
+            cmbMedioConexion.Items.Clear();
+            cmbMedioConexion.Items.Add(new ComboBoxItem("DI API", SapConnectionMethod.DiApi.ToString()));
+            cmbMedioConexion.Items.Add(new ComboBoxItem("Service Layer", SapConnectionMethod.ServiceLayer.ToString()));
+            cmbMedioConexion.DisplayMember = "Text";
+            cmbMedioConexion.ValueMember = "Value";
+            cmbMedioConexion.SelectedIndex = 0;
         }
 
         private void CargarTiposServidor()
@@ -120,6 +131,8 @@ namespace CARGA_UDO
             selected.DbPassword = txtClaveBD.Text;
             selected.SapUser = txtUsuarioSAP.Text.Trim();
             selected.SapPassword = txtClaveSAP.Text;
+            selected.ConnectionMethod = GetSelectedConnectionMethod();
+            selected.ServiceLayerUrl = txtServiceLayerUrl.Text.Trim();
             RefrescarListaConexiones(selected.Id);
             return true;
         }
@@ -151,6 +164,8 @@ namespace CARGA_UDO
             txtClaveBD.Text = profile?.DbPassword ?? string.Empty;
             txtUsuarioSAP.Text = profile?.SapUser ?? string.Empty;
             txtClaveSAP.Text = profile?.SapPassword ?? string.Empty;
+            txtServiceLayerUrl.Text = profile?.ServiceLayerUrl ?? string.Empty;
+            SelectConnectionMethod(profile?.ConnectionMethod ?? SapConnectionMethod.DiApi);
             SelectServerType(profile?.DbServerType);
             loadingProfile = false;
         }
@@ -190,7 +205,35 @@ namespace CARGA_UDO
                 return false;
             }
 
+            if (GetSelectedConnectionMethod() == SapConnectionMethod.ServiceLayer && string.IsNullOrWhiteSpace(txtServiceLayerUrl.Text))
+            {
+                MessageBox.Show("Para Service Layer complete la URL del servicio.",
+                    "Configuración incompleta", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
+            }
+
             return true;
+        }
+
+        private SapConnectionMethod GetSelectedConnectionMethod()
+        {
+            string value = (cmbMedioConexion.SelectedItem as ComboBoxItem)?.Value;
+            return Enum.TryParse(value, out SapConnectionMethod method) ? method : SapConnectionMethod.DiApi;
+        }
+
+        private void SelectConnectionMethod(SapConnectionMethod method)
+        {
+            for (int i = 0; i < cmbMedioConexion.Items.Count; i++)
+            {
+                if ((cmbMedioConexion.Items[i] as ComboBoxItem)?.Value == method.ToString())
+                {
+                    cmbMedioConexion.SelectedIndex = i;
+                    return;
+                }
+            }
+
+            if (cmbMedioConexion.Items.Count > 0)
+                cmbMedioConexion.SelectedIndex = 0;
         }
 
         private string GetSelectedServerType()
