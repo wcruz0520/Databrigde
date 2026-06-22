@@ -133,19 +133,17 @@ namespace CARGA_UDO
                 return;
 
             company.Server = profile.Server;
-            company.LicenseServer = profile.LicenseServer;
+            //company.LicenseServer = profile.LicenseServer;
             company.CompanyDB = profile.CompanyDb;
             company.UserName = profile.SapUser;
             company.Password = profile.SapPassword;
-
-            if (!string.IsNullOrWhiteSpace(profile.DbUser)) company.DbUserName = profile.DbUser;
-            if (!string.IsNullOrWhiteSpace(profile.DbPassword)) company.DbPassword = profile.DbPassword;
-
             if (!string.IsNullOrWhiteSpace(GetDbServerType(profile).ToString())) company.DbServerType = GetDbServerType(profile);
+            company.UseTrusted = profile.UseTrusted;
 
-            if (!profile.UseTrusted)
+            if (profile.UseTrusted)
             {
-                company.SLDServer = profile.SLDServer;
+                company.DbUserName = profile.DbUser;
+                company.DbPassword = profile.DbPassword;
             }
         }
 
