@@ -47,6 +47,7 @@ namespace CARGA_UDO
             this.MIConfig = new FontAwesome.Sharp.IconMenuItem();
             this.cmbConexiones = new System.Windows.Forms.ComboBox();
             this.lblConexion = new System.Windows.Forms.Label();
+            this.chckUIAPI = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dtgRegistros)).BeginInit();
             this.grpModoCarga.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -301,12 +302,26 @@ namespace CARGA_UDO
             this.lblConexion.TabIndex = 12;
             this.lblConexion.Text = "Seleccionar compañía:";
             // 
+            // chckUIAPI
+            // 
+            this.chckUIAPI.AutoSize = true;
+            this.chckUIAPI.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.chckUIAPI.Font = new System.Drawing.Font("Microsoft Sans Serif", 7F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.chckUIAPI.Location = new System.Drawing.Point(267, 7);
+            this.chckUIAPI.Name = "chckUIAPI";
+            this.chckUIAPI.Size = new System.Drawing.Size(134, 21);
+            this.chckUIAPI.TabIndex = 14;
+            this.chckUIAPI.Text = "Conexion UI API";
+            this.chckUIAPI.UseVisualStyleBackColor = false;
+            this.chckUIAPI.CheckedChanged += new System.EventHandler(this.chckUIAPI_CheckedChanged);
+            // 
             // Principal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(900, 562);
+            this.Controls.Add(this.chckUIAPI);
             this.Controls.Add(this.cmbConexiones);
             this.Controls.Add(this.lblConexion);
             this.Controls.Add(this.groupBox1);
@@ -356,6 +371,7 @@ namespace CARGA_UDO
         private FontAwesome.Sharp.IconMenuItem MIConfig;
         private System.Windows.Forms.ComboBox cmbConexiones;
         private System.Windows.Forms.Label lblConexion;
+        private System.Windows.Forms.CheckBox chckUIAPI;
     }
 }
 

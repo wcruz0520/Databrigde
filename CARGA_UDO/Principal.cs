@@ -1722,6 +1722,10 @@ namespace CARGA_UDO
             }
         }
 
+        private void chckUIAPI_CheckedChanged(object sender, EventArgs e)
+        {
+            
+        }
     }
 
     internal class ContextoTablaHija
