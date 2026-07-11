@@ -16,6 +16,7 @@ namespace CARGA_UDO
         public FrmLogCarga(List<ResultadoCarga> log)
         {
             InitializeComponent();
+            AplicarDisenoProfesional();
 
             _logOriginal = log;
 
@@ -31,6 +32,38 @@ namespace CARGA_UDO
             //    Code = x.Code,
             //    Resultado = x.Descripcion
             //}).ToList();
+        }
+
+        private void AplicarDisenoProfesional()
+        {
+            Color colorPrimario = SystemColors.ActiveCaption;
+            Color colorTexto = Color.FromArgb(45, 55, 72);
+
+            BackColor = Color.White;
+            Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+
+            cmbFiltro.BackColor = Color.White;
+            cmbFiltro.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFiltro.FlatStyle = FlatStyle.Flat;
+            cmbFiltro.Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+
+            dtgLog.AllowUserToAddRows = false;
+            dtgLog.AllowUserToDeleteRows = false;
+            dtgLog.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dtgLog.BackgroundColor = Color.White;
+            dtgLog.BorderStyle = BorderStyle.None;
+            dtgLog.EnableHeadersVisualStyles = false;
+            dtgLog.GridColor = Color.FromArgb(226, 232, 240);
+            dtgLog.ColumnHeadersDefaultCellStyle.BackColor = colorPrimario;
+            dtgLog.ColumnHeadersDefaultCellStyle.ForeColor = Color.Black;
+            dtgLog.ColumnHeadersDefaultCellStyle.Font = new Font("Microsoft Sans Serif", 8F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            dtgLog.DefaultCellStyle.BackColor = Color.White;
+            dtgLog.DefaultCellStyle.ForeColor = colorTexto;
+            dtgLog.DefaultCellStyle.SelectionBackColor = Color.FromArgb(221, 235, 247);
+            dtgLog.DefaultCellStyle.SelectionForeColor = Color.Black;
+            dtgLog.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(248, 251, 255);
+            dtgLog.RowHeadersVisible = false;
+            dtgLog.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         }
 
         private void CargarGrid(List<ResultadoCarga> lista)

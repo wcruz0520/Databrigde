@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace CARGA_UDO
@@ -16,6 +17,72 @@ namespace CARGA_UDO
         public ConfigForm()
         {
             InitializeComponent();
+            AplicarDisenoProfesional();
+        }
+
+        private void AplicarDisenoProfesional()
+        {
+            Color colorPrimario = SystemColors.ActiveCaption;
+            Color colorTexto = Color.FromArgb(45, 55, 72);
+            Color colorFondo = Color.White;
+
+            BackColor = colorFondo;
+            Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+
+            lstConexiones.BackColor = Color.FromArgb(248, 251, 255);
+            lstConexiones.BorderStyle = BorderStyle.FixedSingle;
+            lstConexiones.Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+
+            EstilizarBoton(btnAgregarConexion, colorPrimario, Color.Black);
+            EstilizarBoton(btnEliminarConexion, Color.Gainsboro, colorTexto);
+            EstilizarBoton(btnGuardar, colorPrimario, Color.Black);
+            EstilizarBoton(btnCancelar, Color.Gainsboro, colorTexto);
+
+            foreach (Control control in Controls)
+            {
+                Label label = control as Label;
+                TextBox textBox = control as TextBox;
+                ComboBox comboBox = control as ComboBox;
+                CheckBox checkBox = control as CheckBox;
+
+                if (label != null)
+                {
+                    label.ForeColor = colorTexto;
+                    label.Font = new Font("Microsoft Sans Serif", 7.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                }
+                else if (textBox != null)
+                {
+                    textBox.BackColor = colorFondo;
+                    textBox.BorderStyle = BorderStyle.FixedSingle;
+                    textBox.Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                }
+                else if (comboBox != null)
+                {
+                    comboBox.BackColor = colorFondo;
+                    comboBox.FlatStyle = FlatStyle.Flat;
+                    comboBox.Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                }
+                else if (checkBox != null)
+                {
+                    checkBox.ForeColor = colorTexto;
+                    checkBox.Font = new Font("Microsoft Sans Serif", 7.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+                }
+            }
+
+            nudVersionSAP.BorderStyle = BorderStyle.FixedSingle;
+            nudVersionSAP.BackColor = colorFondo;
+            nudVersionSAP.Font = new Font("Microsoft Sans Serif", 8.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+        }
+
+        private void EstilizarBoton(Button boton, Color fondo, Color texto)
+        {
+            boton.BackColor = fondo;
+            boton.ForeColor = texto;
+            boton.FlatStyle = FlatStyle.Flat;
+            boton.FlatAppearance.BorderColor = Color.FromArgb(180, 195, 210);
+            boton.FlatAppearance.BorderSize = 1;
+            boton.Font = new Font("Microsoft Sans Serif", 7.5F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            boton.UseVisualStyleBackColor = false;
         }
 
         private void ConfigForm_Load(object sender, EventArgs e)
